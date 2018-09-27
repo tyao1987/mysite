@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+  <table  class="table table-striped">
+			<tr>
+				<th>VersionID</th>
+				<th>aid</th>
+				<th>name</th>
+				<th>CreateTime</th>
+				<th>CreateUser</th>
+				<th>Operation</th>
+			</tr>
+			<?php 
+			$i = 0;
+			foreach ($this->data as $tmp) : 
+			$class = $i % 2 == 0 ? "even" : "odd"?>
+			<tr>		
+				<td><?php if($i==0):?>Current:<?php endif;?><?php echo $tmp['versionid']; ?></td>
+				<td><?php echo $tmp['aid']?></td>
+				<td><?php echo $tmp['name']?></td>
+				<td><?php echo $tmp['createtime']?></td>
+				<td><?php echo $tmp['createuser']?></td>
+				<td><a href="/article/edit?vid=<?echo $tmp['versionid'];?>&type=VERSION<? if($i==0):?>&isnewversion=1<?endif;?>">view</a>
+				
+					<?php if($i>0):?>
+						<a href="/article/makecurrent?vid=<?echo $tmp['versionid'];?>&type=VERSION">make current</a>
+					<?php endif;?>
+				</td>
+			</tr>
+			<?php $i++; endforeach;?>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<?if($this->pageView):?>
+
+<?=$this->content?>
+
+<?elseif ($this->listView):?>
+
+<style type='text/css'>
+html,body {margin:0;padding:0;}
+h2 {background:#333;color:#fff;padding:10px;}
+h2 a {color:orange;font-size:14px;}
+h2 strong a {color:red;}
+h2 span {color:#999;font-size:14px;font-weight:normal;}
+</style>
+
+<br />
+
+<form method="get">
+URL: <input type="text" size="80" name="page" value="<?=$this->page?>" />
+<input type="submit" value="Submit" />
+</form>
+
+<?=$this->content?>
+
+<?endif;?>

@@ -1,0 +1,137 @@
+<?php
+use Zend\Form\Element;
+?>
+
+
+<h3>Admin Access Log</h3>
+
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+    <h3 class="panel-title">Search <span class="glyphicon pull-right glyphicon-plus"></span></h3>
+    </a>
+  </div>
+  
+  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel">
+  <div class="panel-body">
+<form class="form-inline" role="form">
+  <div class="form-group">
+    <label for="inputId" class="control-label">User:</label>
+    
+    	<?php 
+    	   
+    		$element = new Element\Select("user_id");
+    		
+    		$element->setValueOptions( 
+					$this->users
+    		);
+    		$element->setAttributes(array(
+    				'class'=>'form-control'
+    		));
+			if($this->user_id){
+				$element->setValue($this->user_id);
+			}
+			echo $this->formselect($element);
+    	?>
+    
+  </div>
+  <div class="form-group">
+    <label for="inputUsername" class="control-label">Site:</label>
+    
+    	<?php 
+    		$element = new Element\Select("site");
+    		
+    		$element->setValueOptions( 
+					$this->sites
+    		);
+    		$element->setAttributes(array(
+    				'class'=>'form-control'
+    		));
+			if($this->site){
+				$element->setValue($this->site);
+			}
+			echo $this->formselect($element);
+    	?>
+    
+  </div>
+  
+  <div class="form-group">
+    <label for="inputStartDate" class="control-label">Url:</label>
+    
+    	<?php 
+    		$element = new Element\Text("url");
+    		if($this->url){
+    			$element->setValue($this->url);
+    		}
+    		$element->setAttributes(array(
+				'id'=>'inputStartDate',
+				'class'=>'form-control'
+			));
+			echo $this->formtext($element);
+    	?>
+    
+  </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Search</button>&nbsp;&nbsp;<a href="<?php echo $this->url("default",array(
+			    		"controller"=>"index",
+			    		"action" => "log"
+			    )); ?>">See All</a>
+    </div>
+  </div>
+</form>
+</div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+	<table  class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>UserName</th>
+				<th>Url</th>
+				<th>Data</th>
+				<th>IP</th>
+				<th>Time</th>
+				<th>Site</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $log){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($log['id']); ?>  </td>
+			    <td> <?php echo $this->escapehtml($log['user_name']); ?> </td>
+			    <td> <?php echo $this->escapehtml($log['url']); ?> </td>
+			    <td> 
+			    <?php if ($log->params):?>
+				<img class="accessParams" title="Params-<?php $str = print_r(unserialize($log->params), true); echo  $this->escapeHtml('<pre>'.$str.'</pre>'); ?>" src="http://images.pricerunner.com/images/site-gui/filters/help.gif"/>
+				<?php endif;?>
+			    </td>
+			    <td> <?php echo $this->escapehtml($log['ip']); ?> </td>
+			    <td> <?php echo $this->escapehtml($log['date']); ?> </td>
+			    <td><?php echo $this->sites[$log['site_id']];?></td>
+			</tr>
+			<?php } ?>
+	</table>
+	
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'index','action'=>'log'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div>
+</div>

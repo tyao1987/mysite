@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0'); ?>
+
+    <?php echo $this->headTitle('cms')->setAutoEscape(false) ?>
+
+    <!-- Bootstrap core CSS -->
+    <!-- Custom styles for this template -->
+    <?php echo $this->headLink()->prependStylesheet($this->basePath() . '/styles/dashboard.css')
+                    ->prependStylesheet($this->basePath() . '/styles/bootstrap.min.css')
+    				->prependStylesheet($this->basePath() . '/styles/signin.css');?>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <?php echo $this->headscript()->appendFile($this->basepath() . '/scripts/admin/jquery.min.js')
+    	 	   ->appendFile($this->basepath() . '/scripts/admin/jquery.upload.js')
+               ->appendFile($this->basepath() . '/scripts/admin/ie-emulation-modes-warning.js')
+               ->appendFile(
+        	           $this->basepath() . '/scripts/admin/html5shiv.min.js',
+                       'text/javascript',
+                        array('conditional' => 'lt IE 9'))
+               ->appendFile(
+                        $this->basepath() . '/scripts/admin/respond.min.js',
+                        'text/javascript',
+                        array('conditional' => 'lt IE 9'));
+
+    ?>
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">CMS</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <?php //echo $this->RenderAdminMenu();?>
+          <?php echo $this->CurrentAdminUser();?>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class='col-sm-3 col-md-2 sidebar'  id='options'>
+        <?php echo $this->RenderOptions();
+        //echo $this->navigation('navigation')->menu()->setPartial('partial/leftSideBar');
+    ?>
+        </div>
+        <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2 main">
+            <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partial/breadcrumbs');?>
+            <?php //echo $this->RenderLinks($breadcrumbs, 'breadcrumb', 'You are here: ', null, '');?>
+            <?php echo $this->RenderAlert();?>
+            <?php echo $this->content;?>
+        </div>
+        <div class='col-sm-3 col-md-2 rightSidebar'>
+        <?php 
+        	//$items = array(
+                //'<a href="#basic"  class="selected"  data-toggle="tab" >Basic Configuration</a>' ,
+                //'<a href="#reviewProperties" data-toggle="tab" >Review Properties</a>' ,
+                //'<a href="#userTools" data-toggle="tab" >User Tools</a>' ,
+            //);
+			$items = array(
+					'<a href="#cms" class="selected" data-toggle="tab">Site CMSDB Data</a>' ,
+					'<a href="#basic" data-toggle="tab">Basic Configuration</a>' ,
+			);
+            echo $this->htmllist($items, false, array('class' => 'nav nav-sidebar'), false);
+        ?>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/scripts/admin/bootstrap.min.js"></script>
+    <script src="/scripts/admin/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/scripts/admin/ie10-viewport-bug-workaround.js"></script>
+  </body>
+<script>
+$('a.add_to_my_bookmarks').click(function(){
+    var label = prompt('Bookmark label:');
+    if(label){
+	    var url = $(this).attr('href');
+	    url += '/label/' + label;
+	    if(jQuery.get(url)){
+	        alert('Your bookmark was successfully saved.');
+	    }
+    }
+    return false;
+});
+
+</script>
+</html>

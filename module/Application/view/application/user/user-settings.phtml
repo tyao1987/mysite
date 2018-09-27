@@ -1,0 +1,477 @@
+<div class="member-wrapper">
+	<h1>Settings</h1>
+    <p>Here you can change your settings and personal information. Each setting can be changed by using the buttons to the right of it.</p>
+    <div id="commandError">
+<?
+	if($this->isPost && empty($this->errorStatus)):
+?>
+    	<p class="success">
+    <?
+    	if($this->isEmailChanged):
+    ?>
+    		We have sent a message to your new e-mail address. Once you click on the included link, your new email address will be activated.
+    <?
+    	else:
+    ?>
+    		Your changes have been saved successfully.
+    <?
+    	endif;
+    ?>
+    	</p>
+<?
+	else:
+		if(!empty($this->errorStatus)):
+?>
+	    <p class="error" id="*.errors">
+	    <?
+	    	foreach ($this->errorStatus as $item):
+	    ?>
+	    	<?=$this->escapehtml($item);?><br/>
+	    <?
+	    	endforeach;
+	    ?>
+	    </p>
+	<?
+		endif;
+	endif;
+?>
+    </div>
+	<div class="tabs">
+    	<ul>
+	    	<li class="active"><h2>General Settings</h2></li>
+		</ul>
+	</div>
+	<?php 
+		$userSettingsUrl = $this->GetUrl('user_settings');
+	?>
+    <div class="section">
+        <div class="view">
+            <div class="col1">Alias:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif');?>"/>
+            	</a>
+            </div>
+            <div class="col3"><?=$this->escapeHtml($this->rawUserProperties['userName']);?></div>
+        </div>
+        <div class="input">
+            <div class="col1">Alias</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif');?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="commandUsername">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif');?>" alt="Save" class="save"/>
+                    <input type="text" maxlength="21" value="<?=$this->escapeHtml($this->postUserProperties['userName']);?>" class="extended" name="username" id="username"/>
+                    <input type="hidden" value="username" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+  	<div class="section">
+        <div class="view">
+            <div class="col1">E-mail address:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif');?>"/>
+            	</a>
+            </div>
+            <div class="col3"><?=$this->escapeHtml($this->rawUserProperties['email']);?></div>
+        </div>
+        <div class="input">
+            <div class="col1">E-mail address</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="commandEmail">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif');?>" alt="Save" class="save"/>
+                    <input type="text" maxlength="64" value="<?=$this->escapeHtml($this->postUserProperties['email']);?>" class="extended" name="newEmail" id="email"/>
+                    <input type="hidden" value="email" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="view">
+            <div class="col1">Name:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+			<?
+            	if (empty($this->rawUserProperties['firstName']) && empty($this->rawUserProperties['lastName'])):
+        	?>
+            		Not provided
+        	<?
+           		else:
+	            	echo $this->escapeHtml($this->rawUserProperties['firstName'])."&nbsp;".$this->escapeHtml($this->rawUserProperties['lastName']);
+           		endif;
+        	?>
+			</div>
+        </div>
+        <div class="input">
+            <div class="col1">Name</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="command">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif');?>" alt="Save" class="save"/>
+                    <label for="firstName">First Name:</label>
+                    <input type="text" maxlength="32" value="<?=$this->escapeHtml($this->postUserProperties['firstName']);?>" class="extended" name="firstName" id="firstName"/>
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" maxlength="32" value="<?=$this->escapeHtml($this->postUserProperties['lastName'])?>" class="extended" name="lastName" id="lastName"/>
+                    <input type="hidden" value="name" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="view">
+            <div class="col1">Gender:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+           	<?
+            	if(empty($this->rawUserProperties['gender'])):
+            ?>
+	            	Not provided
+	        <?
+	        	else:
+            		echo $this->rawUserProperties['gender'] == 'F' ? 'Female' : 'Male';
+            	endif;
+            ?>
+            </div>
+        </div>
+        <div class="input">
+            <div class="col1">Gender</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="command">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif');?>" alt="Save" class="save"/>
+                    <?
+                    	$genderChecked = $this->postUserProperties['gender'] == 'M' ? 'checked="checked"' : '';
+                    ?>
+                    <input type="radio" <?=$genderChecked;?> value="M" name="gender"/>&nbsp;Male
+                    <?
+                    	$genderChecked = $this->postUserProperties['gender'] == 'F' ? 'checked="checked"' : '';
+                    ?>
+                    <input type="radio" <?=$genderChecked;?> value="F" name="gender"/>&nbsp;FEMALE
+                    <input type="hidden" value="gender" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="view">
+            <div class="col1">Year of birth:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif')?>"/>
+            	</a>	
+            </div>
+            <div class="col3">
+			<?
+				if(empty($this->rawUserProperties['year'])):
+			?>
+	        	Not provided
+	        <?
+	        	else:
+	        		echo $this->rawUserProperties['year'];
+				endif;
+			?>
+			</div>
+        </div>
+        <div class="input">
+            <div class="col1">Year of birth</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif');?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="command">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif')?>" alt="Save" class="save"/>
+                    <select name="year" id="year">
+    					<option value="">Choose</option>
+    					<?
+    						$date = new \DateTime();
+    						$currentYear = $date->format('Y');
+    						for($i = $currentYear; $i >= 1940; $i--):
+    							$selected = $this->postUserProperties['year'] == $i ? 'selected="selected"' : '';
+    					?>
+    					<option <?=$selected;?> value="<?=$i;?>"><?=$i;?></option>';
+    					<?
+    						endfor;
+    					?>
+					</select>
+                    <input type="hidden" value="year" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="view">
+            <div class="col1">Address:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+            <?
+            	if(empty($this->rawUserProperties['street']) && empty($this->rawUserProperties['city']) && empty($this->rawUserProperties['postalcode'])):
+            ?>
+	        		Not provided
+	        <?
+	        	else:
+	        ?>
+	            <?=$this->escapeHtml($this->rawUserProperties['street']);?><br />
+            	<?=$this->escapeHtml($this->rawUserProperties['city']);?>&nbsp;<?=$this->escapeHtml($this->rawUserProperties['postalcode']);?>
+            <?
+            	endif;
+            ?>
+            </div>
+        </div>
+        <div class="input">
+            <div class="col1">Address</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="command">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif')?>" alt="Save" class="save"/>
+                    <label for="street">Street address:</label>
+                    <input type="text" maxlength="64" value="<?=$this->escapeHtml($this->postUserProperties['street']);?>" class="extended" name="street" id="street"/>
+                    <label for="city">City:</label>
+                    <input type="text" maxlength="64" value="<?=$this->escapeHtml($this->postUserProperties['city']);?>" class="extended" name="city" id="city"/>
+                    <label for="postalcode">Zip code:</label>
+                    <input type="text" maxlength="10" value="<?=$this->escapeHtml($this->postUserProperties['postalcode']);?>" class="extended" name="postalcode" id="postalcode"/>
+                    <input type="hidden" value="address" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="view">
+            <div class="col1">Mobile phone:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+            <?
+            	if(empty($this->rawUserProperties['cellphone'])):
+            ?>
+	            	Not provided
+	        <?
+	        	else:
+	            	echo $this->rawUserProperties['cellphone'];
+            	endif;
+            ?>
+            </div>
+        </div>
+        <div class="input">
+            <div class="col1">Mobile phone</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="cancel">
+            		<img src="<?=$this->GetImg('i/signup/icon-cancel.gif');?>"/>
+            	</a>
+            </div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="commandCellphone">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif');?>" alt="Save" class="save"/>
+                    <input type="text" maxlength="64" value="<?=$this->escapehtml($this->postUserProperties['cellphone']);?>" class="extended" name="cellphone" id="cellphone"/>
+                    <input type="hidden" value="cellphone" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="view">
+            <div class="col1">Password:</div>
+            <div class="col2">
+            	<a href="javascript:void(0)" class="change">
+            		<img src="<?=$this->GetImg('i/signup/icon-change.gif')?>"/>
+            	</a>
+            </div>
+            <div class="col3">********</div>
+        </div>
+        <div class="input">
+            <div class="col1">Password</div>
+            <div class="col2"><a href="javascript:void(0)" class="cancel"><img src="<?=$this->GetImg('i/signup/icon-cancel.gif')?>"/></a></div>
+            <div class="col3">
+                <form action="<?=$userSettingsUrl;?>" method="post" id="command">
+                    <input type="image" src="<?=$this->GetImg('i/signup/icon-save.gif')?>" alt="Save" class="save"/>
+                    <label for="oldPassword">Old Password:</label>
+                    <input type="password" value="" class="extended" name="oldPassword" id="oldPassword" autocomplete="off"/>
+                    <label for="password">Create new password:</label>
+                    <input type="password" value="" class="extended" name="password" id="password" autocomplete="off"/>
+                    <label for="repeatPassword">Re-enter new password:</label>
+                    <input type="password" value="" class="extended" name="passwordRepeat" id="repeatPassword" autocomplete="off"/>
+                    <input type="hidden" value="password" name="type"/>
+                    <div class="csrf">
+                    	<?=$this->formElement($csrf);?>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+
+    (function($) {
+        var showInput = function(section) {
+            return function() {
+                $(".view", section).each(function() {
+                    $(this).hide();
+                });
+                $(".input", section).each(function() {
+                    $(this).show();
+                });
+            }
+        };
+        var hideInput = function(section) {
+            return function() {
+                $(".view", section).each(function() {
+                    $(this).show();
+                });
+                $(".input", section).each(function() {
+                    $(this).hide();
+                });
+                var form = $("form", section)[0];
+                if (form != null) {
+                    form.reset();
+                }
+            }
+        };
+        $(".section").each(function() {
+            var section = this;
+            $("a.change", this).each(function() {
+                var link = this;
+                $(".section").each(function() {
+                    if (section != this) {
+                        $(link).click(hideInput(this));
+                    }
+                });
+                $(link).click(showInput(section));
+            });
+            $("a.cancel", this).each(function() {
+                $(this).click(hideInput(section));
+            });
+            $(".input", this).each(function() {
+                $(":hidden[name=type]", this).each(function() {
+                    if (this.value != '<?=$this->postType;?>') {
+                        $(".input", section).hide();
+                    } else {
+                        $(".view", section).hide();
+                    }
+                })
+            });
+            
+        });
+
+        $("#commandUsername").submit(function() {
+       	 	if($.trim($("#username").val()) == ""){
+		        if($("#commandError .error").length > 0){
+		        	$("#commandError .error").html('<?=$this->escapeJs('Your user name.');?>');
+		        }else{
+		        	errText = $("<p class=\"error\"><?=$this->escapeJs('Your user name.');?></p>");
+			        $("#commandError").append(errText);
+		        }
+	        	return false;
+	        }
+			return true;
+        });
+
+        $("#commandEmail").submit(function() {
+       	 	if($.trim($("#email").val()) == ""){
+		        if($("#commandError .error").length>0){
+		        	$("#commandError .error").html('<?=$this->escapeJs('Please fill out your email address.');?>');
+		        }else{
+		        	errText = $("<p class=\"error\"><?=$this->escapeJs('Please fill out your email address.');?></p>");
+			        $("#commandError").append(errText);
+		        }
+	        	return false;
+	        }
+
+          	var patten = new RegExp(<?=$regex['email'];?>);
+      		if(!patten.test($.trim($("#email").val()))){
+     			if($("#commandError .error").length > 0){
+  		        	$("#commandError .error").html('<?=$this->escapeJs('Invalid E-mail Address.');?>');
+  		        }else{
+  		        	errText = $("<p class=\"error\"><?=$this->escapeJs('Invalid E-mail Address.');?></p>");
+  			        $("#commandError").append(errText);
+  		        }
+  	        	return false;
+      		}
+			return true;
+        });
+
+        $("#commandCellphone").submit(function() {
+
+        	var patten = new RegExp(<?=$regex['mobile_phone'];?>);
+            
+       	 	if($.trim($("#cellphone").val()) != "" && !patten.test($.trim($("#cellphone").val())) ){
+		        if($("#commandError .error").length > 0){
+		        	$("#commandError .error").html('<?=$this->escapeJs('Invalid mobile phone number');?>');
+		        }else{
+		        	errText = $("<p class=\"error\"><?=$this->escapeJs('Invalid mobile phone number');?></p>");
+			        $("#commandError").append(errText);
+		        }
+	        	return false;
+	        }
+			return true;
+        });
+        
+    })(jQuery);
+</script>

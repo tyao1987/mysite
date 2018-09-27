@@ -1,0 +1,153 @@
+<?php
+use Zend\Form\Element;
+?>
+
+<h3 class="page-title">LANG LIST</h3>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+	    <h3 class="panel-title">Search <span class="glyphicon pull-right glyphicon-plus"></span></h3>
+	    </a>
+  </div>
+  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel">
+  <div class="panel-body">
+<?php echo $this->render("layout/udferror"); ?>
+<form class="form-inline" role="form">
+
+  <div class="form-group">
+    <label for="inputKey" class="control-label">KEY:</label>
+  
+    	<?php 
+    		$element = new Element\Text("key");
+    		if($this->key){
+    			$element->setValue($this->key);
+    		}
+    		$element->setAttributes(array(
+				'id'=>'inputKey',
+				'class'=>'form-control'
+			));
+			echo $this->formtext($element);
+    	?>
+
+  </div>   
+  
+  <div class="form-group">
+   <label  class="control-label">Lang:</label>
+  
+    	<?php 
+    		
+    		$element = new Element\Select("language");
+    		$options = $this->languages ? $this->languages : array();
+    		$element->setValueOptions( 
+					$options
+    		);
+			$element->setAttribute("class", "form-control");
+			if($this->language){
+				$element->setValue(
+					$this->language
+				);
+			}else {
+				$element->setValue("GBR");
+			}
+			echo $this->formselect($element);
+    	?>
+    
+  </div>
+  
+   <div class="form-group">
+    <label for="inputText" class=" control-label">Text:</label>
+   
+    	<?php 
+    		$element = new Element\Text("text");
+    		if($this->text){
+    			$element->setValue($this->text);
+    		}
+    		$element->setAttributes(array(
+				'id'=>'inputText',
+				'class'=>'form-control'
+			));
+			echo $this->formtext($element);
+    	?>
+    
+  </div> 
+  
+  <div class="form-group">
+    
+      <button type="submit" class="form-control btn btn-primary" style="" role="button">Search</button>
+   
+  </div>
+</form>
+</div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  
+  <div class="panel-body">
+
+   <div class=".table-responsive" >
+	<table id="dataTable" class="table table-bordered table-striped"style="border-collapse: collapse;border-spacing: 0;border-left: 1px solid #BCD4F6;border-top: 1px solid #BCD4F6;">
+			<tr>
+				<th>ID</th>
+				<th>Key</th>
+				<th>CHN</th>
+				<th>GBR</th>
+				<th>Action</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $member){ ?>
+			<tr>
+			    <td><?php echo $this->escapehtml($member['id']); ?>  </td>
+			    <td style="word-wrap: break-word;word-break: break-all;"> <?php echo $this->escapehtml($member['lang']); ?> </td>
+			    <td style="word-wrap: break-word;word-break: break-all;"> <?php echo $this->escapehtml($member['CHN']); ?> </td>
+			    <td style="word-wrap: break-word;word-break: break-all;"> <?php echo $this->escapehtml($member['GBR']); ?> </td>
+			    <td>  
+			    	<a href="<?php echo $this->url("default",array(
+			    		"controller"=>"translation",
+			    		"action" => "edit",
+			    		"id" => $member['id'])); ?>">
+			    		E
+			    	</a>     
+			    	
+			    	<a  onclick="return confirm('really want to delete ?')" href="<?php echo $this->url("default",array(
+			    		"controller"=>"translation",
+			    		"action" => "delete",
+			    		"id" => $member['id'])); ?>">
+			    		D
+			    	</a> 
+			    	
+			    	
+			    </td>
+			</tr>
+			<?php } ?>
+	</table>
+	</div>
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'translation','action'=>'list'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div></div>
+<script type="text/javascript">
+(function($){
+	$('tr').hover(function(){
+	    $(this).addClass('info');
+	}, function(){
+	    $(this).removeClass('info');
+	}); 
+
+})(jQuery);
+</script>

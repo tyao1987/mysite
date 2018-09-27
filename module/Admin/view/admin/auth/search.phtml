@@ -1,0 +1,78 @@
+
+<?php if ($this->ldap):?>
+<p style="text-align:center; margin:20px 0;">
+	Ldap identity for <i><?php echo $this->search_email?></i> <br />
+	<h2 style="text-align:center;margin-bottom:20px;"><?php echo $this->ldap?></h2>
+</p>
+<?php else:?>
+
+<fieldset>
+    <legend>Search Ldap identity</legend>  		
+    <p>Please enter your <b>LDAP</b> login to get started.</p>
+    <?php 
+  	$form = $this->form;
+  	$form->prepare();
+  	echo $this->form()->openTag($form);
+  	?>
+  	
+  	<div class="form-group">
+	    <label for="inputId" class="col-sm-2 control-label">Your PC Username:</label>
+	    <div class="col-sm-10">
+	    	<?php
+			    $name = $form->get('adminUsername');
+			    echo $this->formInput($name);
+			?>
+	    </div>
+	</div>
+	
+	<div class="form-group">
+	    <label for="inputId" class="col-sm-2 control-label">Your PC Password:</label>
+	    <div class="col-sm-10">
+	    	<?php
+			    $name = $form->get('adminPassword');
+			    echo $this->formInput($name);
+			?>
+	    </div>
+	</div>
+	
+	<div class="form-group">
+		<label for="inputId" class="col-sm-2 control-label"></label>
+		<div class="col-sm-10">
+			<?php echo $this->formElement($form->get('getLdapIdentity')) ?>
+		</div>
+	</div>		   	
+	<?php echo $this->formElement($form->get('uri')) ?>
+	
+  	<?php echo $this->form()->closeTag() ?>
+</fieldset>
+
+<script type="text/javascript">
+(function($){
+	$(function(){
+		$('#getLdapIdentity').click(function(){
+			var username = $('#adminUsername').val();
+			var password = $('#adminPassword').val();
+
+			if (!username || !password) {
+				alert('Please enter all information ');
+				return ;
+			}
+
+			$.post("/auth/search",
+				{ "adminUsername": username, "adminPassword": password },
+				function(data){
+					var petten = /^([\.a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+					if (petten.test(data)) {
+						//$('#searchContent').html(data);
+						$('#ldap_identity').attr('value', data).attr('readonly','readonly');
+						$('#searchContent').html('');
+					} else {
+						alert(data);
+					}
+				});
+		});
+	});
+})(jQuery);
+</script>
+
+<?php endif;?>

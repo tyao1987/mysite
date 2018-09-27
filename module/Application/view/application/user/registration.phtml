@@ -1,0 +1,165 @@
+<?
+	$captcha = $this->GetCaptcha();
+?>
+<form id="userRegistration" method="post" action="<?=$this->GetUrl('try_registration');?>">
+<?
+	if(!empty($this->status)):
+?>
+	<p class="error-text" id="errors">
+	<?
+		foreach ($this->status as $item):
+			echo $this->escapehtml($item)."<br/>";
+		endforeach;
+	?>
+	</p>
+<?
+	endif;
+?>
+	<label for="username">alias</label>
+	<input id="username" name="username" value="<?=$this->escapeHtml($this->postData['username']);?>" type="text" />
+	<br>
+	<label for="email">email</label>
+	<input id="email" name="email" value="<?=$this->escapeHtml($this->postData['email']);?>" type="text" />
+	<label for="password">password</label>
+	<input id="password" name="password" value="<?=$this->escapeHtml($this->postData['password']);?>" type="password" />
+	<br>
+	<label for="passwordRepeat">passwordRepeat</label>
+	<input id="passwordRepeat" name="passwordRepeat" value="" type="password" />
+	<br>
+	<input id="captcha" class="input" type="text" value="<?=$this->escapeHtml($this->postData['captcha']['value']);?>" name="captcha[value]">
+	<input id="captchaId" name="captcha[id]" type="hidden" value="<?=$captcha['id']?>" />
+	<div class="captcha">
+		<img src="<?=$captcha['url'];?>" />
+	</div>
+	<a class="getNewCaptcha" style="" href="<?=$this->GetUrl('new_captcha');?>">reload image</a>
+	<input type="submit" value="submit"/>
+</form>
+<script type="text/javascript">
+var checkTimeout = null;
+var modifiedFields = {};
+
+function setModified(field){
+	modifiedFields[field] = true;
+    if(field == "password"){
+        modifiedFields["passwordRepeat"] = true;
+    }
+}
+
+function isModified(field){
+	if(modifiedFields[field]){
+        return true;
+    }
+    return false;
+}
+
+
+function checkFields(){
+	var input = {};
+    $("#userRegistration :input").each(function(){
+        if(this.id == "captcha" || this.id=="captchaId") {
+            input[this.name] = this.value;
+        }else if(this.type == "checkbox" && !this.checked || this.type == "submit" || this.type == "hidden"){
+			return ;
+        }else {
+        	input[this.id] = this.value;
+        }
+    });
+    var ajaxUrl = "<?=$this->GetUrl('registration_validation');?>";
+    $.post(ajaxUrl, input, function(errors) {
+        $("#userRegistration :input").each(function(){
+            //$(this).removeClass("error");
+        });
+        var messages = [];
+        for(var field in errors){
+            if(!isModified(field) || field.value == ""){
+                continue;
+            }
+            var fieldElement = $("#userRegistration [id=" + field + "]");
+            //fieldElement.addClass("error");
+            if (errors[field].length > 0) {
+                messages.push(errors[field]);
+            }
+        }
+        if(messages.length > 0){
+            if(!$("#userRegistration [id=errors]").is("p")){
+                $("#userRegistration").prepend('<p class="error-text" id="errors"></p>');
+            }
+            $("#userRegistration [id=errors]").html(messages.join("<br/>"));
+        } else {
+            $("#userRegistration [id=errors]").html("");
+        }
+    }, "json");
+}
+
+function delayedChecker(){
+    clearTimeout(checkTimeout);
+    checkTimeout = setTimeout(function(){
+        checkFields();
+    },3000);
+}
+var xhr;
+$(document).on('click',"a.getNewCaptcha",function(){
+	if (xhr) { xhr.abort(); }
+	var el = $("div.captcha");
+	el.empty();
+	xhr = $.get(
+		 this.href
+		,{}
+		,function(data) {
+			el.append($('<img src="' + data.url + '" />'));
+			$("#captchaId").val(data.id);
+		}
+		,'json'
+	);
+	return false;
+})
+
+$(document).on('submit',"#userRegistration",function(){
+	$("#userRegistration input").each(function(){
+        this.disabled = true;
+    });
+	 	var inputs = new Object;
+ 	$(":input",this).each(function() {
+    	if (this.type == "checkbox" && !this.checked) {
+        	return;
+     	}
+     	if (this.name != '' && this.value != null) {
+         	inputs[this.name] = this.value;
+     	}
+ 	});
+    var request = {
+        type: "POST",
+        url: this.action,
+        data: inputs,       
+        success: function(data){
+        	$("#userRegistration input").each(function(){
+                this.disabled = false;
+            });
+        	var content = $("#userRegistration","<x>"+data+"</x>").html();
+        	if (content == null) {
+                $("#userRegistration").replaceWith(data);
+            } else {
+                $("#userRegistration").html(content);
+            }
+        }
+    }
+    $.ajax(request);
+    return false;
+})
+
+function setModifiedValue(obj){
+	if(obj.value != ''){
+		setModified(obj.id);
+	}
+}
+
+$(document).on('blur',"#userRegistration :text, #userRegistration :password",function(){
+	setModifiedValue(this);
+	checkFields();
+})
+
+$(document).on('keyup',"#userRegistration :text, #userRegistration :password",function(){
+	setModifiedValue(this);
+	delayedChecker();
+})
+</script>

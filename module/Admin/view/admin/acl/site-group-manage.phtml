@@ -1,0 +1,140 @@
+<?php
+use Zend\Form\Element;
+?>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Manage Site Group</h3>
+  </div>
+  <div class="panel-body multiSelectManage">
+  		<?php 
+  		$form = $this->form;
+  		$form->prepare();
+  		echo $this->form()->openTag($form);
+  		?>
+  		
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Name:</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('name');
+				    echo $this->formInput($name);
+				     echo $this->formElementErrors($name,array('class'=>'alert alert-warning'));
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label">Description:</label>
+		  	<div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('description');
+				    echo $this->formTextarea($name);
+				    echo $this->formElementErrors($name,array('class'=>'alert alert-warning'));
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label">Sites:</label>
+		  	<div class="col-sm-10">
+		  	
+		  	<div class="row">
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('site');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  <div class="col-md-2">
+			  <?php
+			    	$name = $form->get('moveRight');
+			    	echo $this->formElement($name);
+				?>
+				
+				<?php
+			    	$name = $form->get('moveLeft');
+			    	echo $this->formElement($name);
+				?>
+				</div>
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('selected');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  
+			
+		  </div>
+		  </div>
+		  </div>
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label"></label>
+		  <div class="col-sm-10">
+		  <?php echo $this->formElement($form->get('submit')) ?>&nbsp;<?php echo $this->formElement($form->get('cancel')) ?>
+		  </div>
+		  </div>		   	
+		<?php echo $this->formElement($form->get('selectedData')) ?>
+		<?php echo $this->formElement($form->get('id')) ?>
+		
+		<?php echo $this->form()->closeTag() ?>
+</div>
+</div>
+<script type="text/javascript">
+    (function($){
+        $(function(){
+            var leftSelector = $("select[id=site]").eq(0);
+            var selected = $("select[id=selected]").eq(0);
+            $("button[name=moveLeft]").click(function(){
+                var ret = [];
+                var options = selected.find("option");
+                options.each(function(){
+                    if(this.selected) {
+                        var tmp = {};
+                        tmp.id = this.value;
+                        tmp.name = this.text;
+                        ret.push(tmp);
+                        this.parentNode.removeChild(this);
+
+                        var optionEl = document.createElement('option');
+                        optionEl.setAttribute('value', tmp.id);
+                        optionEl.setAttribute('title', tmp.name);
+                        var text = document.createTextNode(tmp.name);
+                        optionEl.appendChild(text);
+                        leftSelector.get(0).appendChild(optionEl);
+                    }
+                });
+            });
+            $("button[name=moveRight]").click(function(){
+                var ret = [];
+                var options = leftSelector.find("option");
+                options.each(function(){
+                    if(this.selected) {
+                        var tmp = {};
+                        tmp.id = this.value;
+                        tmp.name = this.text;
+                        ret.push(tmp);
+                        this.parentNode.removeChild(this);
+
+                        var optionEl = document.createElement('option');
+                        optionEl.setAttribute('value', tmp.id);
+                        optionEl.setAttribute('title', tmp.name);
+                        var text = document.createTextNode(tmp.name);
+                        optionEl.appendChild(text);
+                        selected.get(0).appendChild(optionEl);
+                    }
+                });
+            });
+
+            $("div.multiSelectManage form").submit(function(){
+                var ret = [];
+                var options = selected.find("option");
+                options.each(function(){
+                    ret.push(this.value);
+                });
+                $("input[name=selectedData]").get(0).value = ret.join(',');
+            });
+        });
+    })(jQuery);
+</script>
+<!-- Role multi select end -->

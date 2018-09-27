@@ -1,0 +1,68 @@
+<?php
+use Zend\Form\Element;
+?>
+
+
+<h3>Controller List</h3>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  <a href="/acl/controller-edit"><span class="glyphicon glyphicon-plus"></span>Add Controller</a>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+	<table  class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Module</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Action</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $controller){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($controller['id']); ?>  </td>
+			    <td> <?php echo $this->escapehtml($this->modules[$controller['module_id']]); ?> </td>
+			    <td> <?php echo $this->escapehtml($controller['name']); ?> </td>
+			    <td> <?php echo $this->escapehtml($controller['description']); ?> </td>
+			    <td> 
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "controller-edit",
+			    		"id" => $controller['id']
+			    )); ?>">Edit</a>&nbsp;&nbsp;
+			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "controller-delete",
+			    		"id" => $controller['id']
+			    )); ?>">Delete</a>
+			    
+			    </td>
+			    
+			</tr>
+			<?php } ?>
+	</table>
+	
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'acl','action'=>'controller-list'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div>
+</div>

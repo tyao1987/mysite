@@ -1,0 +1,38 @@
+<?php
+$error = isset ( $error ) ? $error : (isset ( $this->error ) ? $this->error : null);
+$close_udf_error = isset ( $close_udf_error ) ? $close_udf_error : (isset ( $this->close_udf_error ) ? $this->close_udf_error : null);
+
+if ($error && ! $close_udf_error) {
+	?>
+<div class="alert alert-danger">
+	<button type="button" class="close" data-dismiss="alert">
+		<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+	</button>
+	<strong> Error </strong> The following errors have occurred:
+	<ul>
+	<?php
+	if (is_array ( $error )) {
+		foreach ( $error as $key => $value ) :
+			?>
+	 	<?php if(is_array($value)): ?>
+	 		<?php foreach ($value as $k=>$v): ?>
+	 		<?php if(is_array($v)):  ?>
+	 		<?php foreach ($v as $v1): ?>
+	 			<li><?php echo $v1;  ?></li>
+	 		<?php endforeach; ?>
+	 		<?php else: ?>
+	 		<li> <?php echo $key.' '.$k  ?> </li>
+	 		<?php endif; ?>
+	 		<?php endforeach; ?>
+	 	<?php else: ?>
+	 	<li><?php echo $value; ?> </li>
+	 	<?php endif; ?>
+	<?php
+		endforeach;
+	} else {
+	?>
+	 	<li><?php echo $error; ?></li>
+	 <?php } ?>
+	 </ul>
+</div>
+<?php } ?>

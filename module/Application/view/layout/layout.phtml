@@ -1,0 +1,78 @@
+<?php 
+use Test\Data;
+use Test\Util\Common;
+
+use Application\Util\Util;
+?>
+<?php echo $this->doctype(); ?>
+
+<html lang="<?$this->seoTpl['meta_language'];?>">
+    <head>
+    	<?php 
+    		$this->headMeta()->appendHttpEquiv(
+									'Content-Type',
+    								'text/html; charset=UTF-8'
+								);
+        	if (!empty($this->tplParams['meta_title'])):
+        		$title = Common::mb_ucfirst(trim(Util::formatString($this->ParseContent($this->tplParams['meta_title']))));
+        	else:
+        		$title = Common::mb_ucfirst(trim(Util::formatString($this->ParseContent($this->seoTpl['meta_title']))));
+        	endif;
+        	
+        	echo $this->headTitle($title)->setAutoEscape(false);
+			
+//         	if (!empty($this->tplParams['meta_keywords'])): 
+//         		$keywords = Util::formatString($this->ParseContent($this->tplParams['meta_keywords'])); 
+//         	else: 
+//         		$keywords = Util::formatString($this->ParseContent($this->seoTpl['meta_keywords'])); 
+//         	endif;
+        	
+//        	$this->headMeta()->appendName('keywords', $keywords);
+        	
+        	if (!empty($this->tplParams['meta_description'])):
+        		$description = Util::formatString($this->ParseContent($this->tplParams['meta_description']));
+        	else:
+        		$description = Util::formatString($this->ParseContent($this->seoTpl['meta_description']));
+        	endif;
+        	
+        	$this->headMeta()->appendName('description', $description);
+		?>
+
+		<?php echo $this->headMeta();?>
+        
+        <!-- Le styles -->
+        <?php echo $this->GetStyle();?>
+        
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/images/favicon.ico'));?>
+
+        <!-- Scripts -->
+        <?php echo $this->GetScript();?>
+
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>"><?php echo $this->translate('Skeleton Application') ?></a>
+                    <div class="nav-collapse collapse">
+                        <div class="nav">
+                        	<?=$this->partial('application/user/user-status.phtml');?>
+                        </div>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <?php echo $this->ParseContent($this->content); ?>
+            <hr>
+            <footer>
+                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
+            </footer>
+        </div> <!-- /container -->
+    </body>
+</html>

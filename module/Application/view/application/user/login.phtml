@@ -1,0 +1,132 @@
+<?php
+$this->placeholder('errorMsg')->captureStart();
+if(!empty($this->status)):
+	$status = $this->status;
+	if (!$status->emailValided): //dont combine the first and the third.
+?>		
+		<p id="null.errors" class="error-text">Invalid login</p>
+<?php	
+	elseif (!$status->emailActived):
+?>
+		<p id="null.errors" class="error-text">Your account needs to be activated before you can use it. Please follow the link we sent you via e-mail. Thank you!</p>
+		<?php 
+			$sendActivationEmailUrl = $this->GetUrl('send_activation_email',array(),array('email' => $this->email,'submit'=>'true'));
+		?>
+		<a href="<?=$sendActivationEmailUrl;?>">Please send me a new activation e-mail.</a>
+<?	
+	elseif(!$status->passwordValided):
+?>
+		<p id="null.errors" class="error-text">Invalid login</p>
+<?php		
+	endif;
+endif;
+$this->placeholder('errorMsg')->captureEnd();
+?>
+	<div class="box-j login-lightbox">
+		<div class="tl">
+			<div class="tr">
+				<h2>Login to Site</h2>
+			</div>
+		</div>
+		<div class="ml">
+			<div class="mr">
+	        	<div class="member-wrapper">
+	                <form action="<?=$this->GetUrl('try_login')?>" method="post" id="loginCommand">	
+	               		<?=$this->placeholder('errorMsg');?>
+		    			<div class="box-blue">
+		    				<div class="box-content">
+		                            <label for="user">e-mail address:</label>
+		                            <input type="text" value="<?=$this->email?>" class="input fullwidth" name="email" id="email"/>
+		    
+		                            <div class="subform">
+		                                <label for="password">Password:</label>
+		                                <input type="password" value="" class="input fullwidth" name="password" id="password"/>
+		                            </div>
+		                            <input type="hidden" value="<?=$this->location?>" name="location" id="location"/>
+		                    </div>
+		                </div>
+	                    <input type="submit" value="Submit" class="submit"/>
+	                    <span class="small">
+	                        Not a member yet? <a href="<?=$this->url('registration');?>">Sign up here!</a><br/>
+	                        <a href="<?=$this->url('password_recovery');?>">Forgotten your password?</a>
+	                    </span>
+					</form>
+				</div>
+	        </div>
+		</div>
+		<div class="bl">
+			<div class="br"></div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+
+	    (function($) {
+	        $("#loginCommand").submit(function() {
+		        var validCheck = true;
+		        if($.trim($("#email").val()) == ""){
+		       		if($("#loginCommand .error-text").length > 0){
+				    	$("#loginCommand .error-text").html('<?=$this->escapeJs('Your user name.');?>');
+				    }else{
+				    	errText = $("<p class=\"error-text\"><?=$this->escapeJs('Your user name.');?></p>");
+					    errText.insertBefore("#loginCommand .box-blue");
+				    }
+		        	validCheck = false;
+		        }else if($.trim($("#password").val()) == ""){
+		        	if($("#loginCommand .error-text").length > 0){
+			        	$("#loginCommand .error-text").html('<?=$this->escapeJs('Please fill out your password.');?>');
+			        }else{
+			        	errText = $("<p class=\"error-text\"><?=$this->escapeJs('Please fill out your password.');?></p>");
+				        errText.insertBefore("#loginCommand .box-blue");
+			        }
+		        	validCheck = false;
+		        }else{
+		        	var patten = new RegExp(<?=$this->regex['email'];?>);
+		    		if(!patten.test($.trim($("#email").val()))){
+		    			if($("#loginCommand .error-text").length > 0){
+				        	$("#loginCommand .error-text").html('<?=$this->escapeJs('Invalid E-mail Address.');?>');
+				        }else{
+				        	errText = $("<p class=\"error-text\"><?=$this->escapeJs('Invalid E-mail Address.');?></p>");
+					        errText.insertBefore("#loginCommand .box-blue");
+				        }
+			        	validCheck = false;
+		    		}
+		        }
+		        if(!validCheck){
+					return false;
+		        }
+		        
+	            $("#loginCommand input").each(function(){
+	                this.disabled = true;
+	            });
+	            var inputs = new Object;
+	            $(":input",this).each(function() {
+	                if (this.type == "checkbox" && !this.checked) {
+	                    return;
+	                }
+	                if (this.name != '' && this.value != null) {
+	                    inputs[this.name] = this.value;
+	                }
+	            });
+	            var request = {
+	                type: "POST",
+	                url: this.action,
+	                dataType: 'html',
+	                data: inputs,             
+	                success: function(data){
+	                    var content = $("#loginCommand","<x>" + data + "</x>").html();
+	                    $("#loginCommand input").each(function(){
+	                        this.disabled = false;
+	                    });
+	                    if (content == null) {
+	                        $("#loginCommand").replaceWith(data);
+	                    } else {
+	                        $("#loginCommand").html(content);
+	                    }
+	                }
+	            }
+	            $.ajax(request);
+	            return false;
+	        });
+	    })(jQuery);
+	</script>

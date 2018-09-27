@@ -1,0 +1,19 @@
+<?
+if($this->submit):
+	if($this->emailExists == 1):
+		echo "We have sent you an e-mail containing an activation link.";
+	elseif($this->emailExists == 0):
+		echo "Sorry, we can't find your email address in our database.";
+	else:
+		echo "Your email address has been activated so you can now login";
+	endif;
+else:
+	$sendActivationEmailUrl = $this->GetUrl('send_activation_email',array(),array('email' => $this->email));
+?>
+<form action="<?=$sendActivationEmailUrl;?>" method="post"> 
+    <p>Sorry, we couldn't send your activation email. Please click retry.</p>
+    <input type="submit" value="Please send me a new activation e-mail." class="submit" name="submit"/>
+</form>
+<?
+endif;
+?>

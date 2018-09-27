@@ -1,0 +1,95 @@
+<?php 
+use Admin\Model\Auth;
+?>
+<!-- <link href="https://code.jquery.com/ui/jquery-ui-1-9-git.css" media="screen" rel="stylesheet" type="text/css"> -->
+<!-- <script type="text/javascript" src="https://code.jquery.com/ui/jquery-ui-1-9-git.js"></script> -->
+<style type="text/css">
+.nav-child{
+    padding-left: 20px;
+}
+.nav-child>li>a{
+    padding: 5px 20px;
+}
+.nav-child>li>a.active, .nav-child>li>a.active:hover, .nav-child>li>a.active:focus {
+    background-color: #428bca;
+    color: #fff;
+}
+.list-group a {padding-left:48px;}
+.list-group a.active {background-color:#fff;color:#428bca;border-color:#ddd;}
+.list-group a.active:hover {background-color:#f5f5f5;border-color:#ddd;color:#428bca;}
+</style>
+<?php  
+$currentUser = Auth::getIdentity();
+if (!empty($currentUser)) {
+$isSuper = $currentUser['id'] == Admin\Model\User::SUPERUSER_ROLE ? 1 : 0;
+$navigation = $this->navigation('navigation');
+?>
+<div class="list-group" style="cursor:pointer;">
+<?php foreach ($this->container as $page): ?>
+<?php 
+if (!($isSuper || $navigation->accept($page))) {
+	continue;
+}
+?>
+  <?php 
+  $html = '<span class="list-group-item disabled">
+    <span class="glyphicon glyphicon-hand-right"></span>&nbsp;&nbsp;'.$page->label.'</span>';
+  $subMenu = '';
+  if (!empty($page->pages)) {
+  	 foreach ($page->pages as $subpage) {
+        if (!($isSuper || $navigation->accept($subpage))) {
+            continue;
+        }
+        $active = $subpage->isActive() ? ' active' : '';
+  	 	$subMenu .= '<a href="'.$subpage->getHref().'" class="list-group-item'.$active.'">'.$subpage->label.'</a>';
+  	 }
+  }
+  if (!empty($subMenu)) {
+  	echo $html.'<div>'.$subMenu.'</div>';
+  }
+  ?>
+<?php endforeach;?>
+</div>
+<script>
+  $(function() {
+//     $( "#menu" ).menu();
+	 $(".list-group span").click(function(){
+		 $(this).next('div').fadeToggle('fast');
+	});
+  });
+  </script>
+<?php } else {?>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">FORGOT PASSWORD</h4>
+  </div>
+  <div class="panel-body">
+<form action="/auth/reset-password" class="form-signin"  role="form" method="POST">
+<p class="form-signin-heading">If you are having trouble logging in please enter
+	your email address below and we will send you your login credentials. </p>
+	<div class="form-group">
+<?php
+
+$element = new Zend\Form\Element\Email ( "email" );
+$element->setAttributes(array(
+	'class' => 'form-control'
+));
+$element->setAttribute('style', "width:100%");
+echo $this->formemail ( $element );
+?>
+	</div>
+	<div class="form-group">
+<?php
+
+$element = new Zend\Form\Element\Submit ( "reminder" );
+$element->setValue ( "Reset Password" );
+$element->setAttribute ( "class", "btn btn-large" );
+$element->setAttribute("class", "form-control");
+$element->setAttribute("style", "width:100%");
+echo $this->formsubmit ( $element );
+?>
+</div>
+</form>
+</div>
+</div>
+<?php };?>

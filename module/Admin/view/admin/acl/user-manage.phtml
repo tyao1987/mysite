@@ -1,0 +1,393 @@
+<?php
+use Zend\Form\Element;
+if(empty($this->scope)){
+	$this->scope = "general";
+}
+?>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">User Manage</h3>
+  </div>
+  <div class="panel-body">
+
+
+<div class="panel panel-default">
+  <div class="panel-body">
+	
+<ul class="nav nav-tabs" role="tablist" id="myTab">
+  <li><a href="#div_general" role="tab" data-toggle="tab">Account</a></li>
+  <li><a href="#div_roles" role="tab" data-toggle="tab">Roles</a></li>
+  <li><a href="#div_siteGroups" role="tab" data-toggle="tab">SiteGroups</a></li>
+  <li><a href="#div_sites" role="tab" data-toggle="tab">Sites</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="div_general">
+  
+  <?php
+	if($this->error){
+?>
+<div class="alert alert-danger">
+	<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	<strong> Error </strong> The following errors have occurred: 
+	<ul>
+	<?php 
+	  foreach ($this->error as $key=>$value):
+	 ?>
+	 	<?php if(is_array($value)): ?>
+	 		<?php foreach ($value as $k=>$v): ?>
+	 		<li> <?php echo $key.' '.$k.' : '.$v;  ?> </li>
+	 		<?php endforeach; ?>
+	 	<?php else: ?>
+	 	<li><?php echo $value; ?> </li>
+	 	<?php endif; ?>
+	<?php
+	  endforeach;
+	 ?>
+	 </ul>
+</div>
+<?php } ?>
+
+<div id="searchContent"></div>
+
+  		<?php 
+  		$form = $this->aclUserForm;
+  		$form->prepare();
+  		echo $this->form()->openTag($form);
+  		?>
+<fieldset>
+    <legend>General Information</legend>  		
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">First Name:</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('first_name');
+				    echo $this->formInput($name);
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Last Name:</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('last_name');
+				    echo $this->formInput($name);
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Email:</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('email');
+				    echo $this->formInput($name);
+				?>
+		    </div>
+		  </div>
+		  
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Update password?</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('update_password');
+				    echo $this->formInput($name);
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Password:</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('newPassword');
+				    echo $this->formInput($name);
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Confirm Password:</label>
+		    <div class="col-sm-10">
+		    	<?php
+				    $name = $form->get('newConfirmPassword');
+				    echo $this->formInput($name);
+				?>
+		    </div>
+		  </div>
+		  
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label"></label>
+		  <div class="col-sm-10">
+		  <?php echo $this->formElement($form->get('submit')) ?>
+		  </div>
+		  </div>		   	
+		<?php echo $this->formElement($form->get('id')) ?>
+</fieldset>		
+		<?php echo $this->form()->closeTag() ?>
+  
+  </div>
+  <div class="tab-pane" id="div_roles">
+  <br/>
+  <?php 
+  		$form = $this->aclUserRolesForm;
+  		$form->prepare();
+  		echo $this->form()->openTag($form);
+  		?>
+  		
+		  
+		 
+		  
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label">User Role:</label>
+		  	<div class="col-sm-10">
+		  	
+		  	<div class="row">
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('roles');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  <div class="col-md-2">
+			  <?php
+			    	$name = $form->get('moveRight');
+			    	echo $this->formElement($name);
+				?>
+				
+				<?php
+			    	$name = $form->get('moveLeft');
+			    	echo $this->formElement($name);
+				?>
+				</div>
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('selectedRoles');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  
+			
+		  </div>
+		  </div>
+		  </div>
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label"></label>
+		  <div class="col-sm-10">
+		  <?php echo $this->formElement($form->get('submit')) ?>
+		  </div>
+		  </div>		   	
+		<?php echo $this->formElement($form->get('selectedRolesData')) ?>
+		<?php echo $this->formElement($form->get('id')) ?>
+		<?php echo $this->formElement($form->get('scope')) ?>
+		
+		<?php echo $this->form()->closeTag() ?>
+  
+  </div>
+  <div class="tab-pane" id="div_siteGroups">
+  
+  <br/>
+  <?php 
+  		$form = $this->aclUserSiteGroupsForm;
+  		$form->prepare();
+  		echo $this->form()->openTag($form);
+  		?>
+  		
+		  
+		 
+		  
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label">SiteGroup:</label>
+		  	<div class="col-sm-10">
+		  	
+		  	<div class="row">
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('siteGroups');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  <div class="col-md-2">
+			  <?php
+			    	$name = $form->get('moveRight');
+			    	echo $this->formElement($name);
+				?>
+				
+				<?php
+			    	$name = $form->get('moveLeft');
+			    	echo $this->formElement($name);
+				?>
+				</div>
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('selectedSiteGroups');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  
+			
+		  </div>
+		  </div>
+		  </div>
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label"></label>
+		  <div class="col-sm-10">
+		  <?php echo $this->formElement($form->get('submit')) ?>
+		  </div>
+		  </div>		   	
+		<?php echo $this->formElement($form->get('selectedSiteGroupsData')) ?>
+		<?php echo $this->formElement($form->get('id')) ?>
+		<?php echo $this->formElement($form->get('scope')) ?>
+		
+		<?php echo $this->form()->closeTag() ?>
+  
+  </div>
+  <div class="tab-pane" id="div_sites">
+  
+  <br/>
+  <?php 
+  		$form = $this->aclUserSitesForm;
+  		$form->prepare();
+  		echo $this->form()->openTag($form);
+  		?>
+  		
+		  
+		 
+		  
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label">Site:</label>
+		  	<div class="col-sm-10">
+		  	
+		  	<div class="row">
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('sites');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  <div class="col-md-2">
+			  <?php
+			    	$name = $form->get('moveRight');
+			    	echo $this->formElement($name);
+				?>
+				
+				<?php
+			    	$name = $form->get('moveLeft');
+			    	echo $this->formElement($name);
+				?>
+				</div>
+			  <div class="col-md-3">
+			  <?php
+			    	$name = $form->get('selectedSites');
+			    	echo $this->formSelect($name);
+				?>
+			  </div>
+			  
+			
+		  </div>
+		  </div>
+		  </div>
+		  <div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label"></label>
+		  <div class="col-sm-10">
+		  <?php echo $this->formElement($form->get('submit')) ?>
+		  </div>
+		  </div>		   	
+		<?php echo $this->formElement($form->get('selectedSitesData')) ?>
+		<?php echo $this->formElement($form->get('id')) ?>
+		<?php echo $this->formElement($form->get('scope')) ?>
+		
+		<?php echo $this->form()->closeTag() ?>
+  
+  </div>
+</div>
+
+	
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+ (function($){
+	$(function(){
+		$('#myTab a[href="#div_<?php echo $this->scope;?>"]').tab('show');
+		 
+		$('#search_ldap').click(function(){
+			$("#searchContent").load("/auth/search");
+		});
+
+		$("button[name=moveRight]").click(function(){
+			var ret = [];
+			var formEl = $(this).parents("form").eq(0);
+			var scope = formEl.parents("div").eq(0).attr('id').substr(4);
+			var scope2 = scope.charAt(0).toUpperCase() + scope.substr(1);
+			var notSelectedEl = $("select[id=" + scope + "]").eq(0);
+			var selectedEl = $("select[id=selected" + scope2 + "]").eq(0);
+			var options = notSelectedEl.find("option");
+			options.each(function(){
+				if(this.selected) {
+					var tmp = {};
+					tmp.id = this.value;
+					tmp.name = this.text;
+					ret.push(tmp);
+					this.parentNode.removeChild(this);
+					
+					var optionEl = document.createElement('option');
+					optionEl.setAttribute('value', tmp.id);
+					var text = document.createTextNode(tmp.name);
+					optionEl.appendChild(text);
+					selectedEl.get(0).appendChild(optionEl);
+				}
+			});
+		});		
+		$("button[name=moveLeft]").click(function(){
+			var ret = [];
+			var formEl = $(this).parents("form").eq(0);
+			var scope = formEl.parents("div").eq(0).attr('id').substr(4);
+			var scope2 = scope.charAt(0).toUpperCase() + scope.substr(1);
+			var notSelectedEl = $("select[id=" + scope + "]").eq(0);
+			var selectedEl = $("select[id=selected" + scope2 + "]").eq(0);
+
+			var options = selectedEl.find("option");
+			options.each(function(){
+				
+				if(this.selected) {
+					var tmp = {};
+					tmp.id = this.value;
+					tmp.name = this.text;
+					ret.push(tmp);
+					this.parentNode.removeChild(this);
+				
+					var optionEl = document.createElement('option');
+					optionEl.setAttribute('value', tmp.id);
+					var text = document.createTextNode(tmp.name);
+					optionEl.appendChild(text);
+					notSelectedEl.get(0).appendChild(optionEl);
+				}
+			});
+		});
+
+		
+		$("form#form_roles,form#form_sites,form#form_siteGroups").submit(function(){
+			var ret = [];
+			var scope = $(this).parents("div").eq(0).attr('id').substr(4);
+			var scope2 = scope.charAt(0).toUpperCase() + scope.substr(1);
+			var selectedEl = $("select[id=selected" + scope2 + "]").eq(0);
+			
+			var options = selectedEl.find("option");
+			options.each(function(){
+				ret.push(this.value);
+			});
+			$("input[name=selected" + scope2 + "Data]").get(0).value = ret.join(',');
+			
+		});
+
+	});
+})(jQuery);
+</script>

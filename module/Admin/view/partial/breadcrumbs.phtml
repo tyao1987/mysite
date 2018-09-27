@@ -1,0 +1,102 @@
+<?php
+use Test\Data;
+use Admin\Util\Util;
+$data = Data::getInstance();
+$controller = $data->get('controller');
+$action = $data->get('action');
+
+$toolbarLinks = $this->layout()->getVariable('toolbarLinks');
+$bookmarks = '';
+if ($toolbarLinks) {
+    $bookmarks .= '<li class="pull-right toolbar">';
+    foreach ($toolbarLinks as $k=>$v) {
+        $bookmarks .= '<a href="'.$v.'" class="add_to_my_bookmarks">'.$k.'</a>';
+    }
+    $bookmarks .= '</li>';
+}
+?>
+<?php if ($controller == 'article' && isset($_GET['aid'])):?>
+<?php $path = $this->layout()->getVariable('path');
+    $bread = "<ol class='breadcrumb'>You are here:";
+    $num = count($path);
+//     if ($num) {
+    	$bread .= "<li><a href=\"/\">Home</a></li><li><a href=\"/article\">Article</a></li>";
+//     }
+    foreach ($path as $k=>$v) {
+//         if ($k+1 == $num) {
+//             $bread .= "<li>{$v->name}</li>";
+//         } else {
+        	$bread .= "<li><a href=\"/article?aid={$v->id}\">{$v->name}</a></li>";
+//         }
+    }
+    
+    $bread .= $bookmarks."</ol>";
+    echo $bread;
+?>
+<?php else:?>
+
+<?php 
+$nav = $this->navigation('navigation');
+$container = $nav->getContainer();
+$resource = 'admin_'.$controller.'_'.$action;
+$current = $container->findBy('resource', $resource);
+$bread = Util::getBreadcrumbs($current, $nav);
+if (!empty($bread)) {
+    $breadcrumbs = "<ol class='breadcrumb'>You are here:";
+    if ((!in_array($controller, array('index'))) || ($controller == 'index' && $action == 'log') ) {
+    	$breadcrumbs .= "<li><a href='/'>Home</a></li>";
+    }
+    $num = count($bread);
+    $i = 1;
+	foreach ($bread as $page) {
+        if ($i == $num) {
+        	$breadcrumbs .= "<li><a href='".$_SERVER['REQUEST_URI']."'>{$page->label}</a></li>";
+        } else {
+        	$breadcrumbs .= "<li><a href='{$page->getHref()}'>{$page->label}</a></li>";
+        }
+        
+        $i ++;
+    }
+    
+    $breadcrumbs .= $bookmarks."</ol>";
+    echo $breadcrumbs;
+} elseif (!empty($bookmarks)) {
+	echo "<ol class='breadcrumb'>{$bookmarks}</ol>";
+}
+?>
+<!-- 
+<?php if ($this->pages || $toolbarLinks):?>
+<ol class='breadcrumb'>
+<?php if ($this->pages):?>
+You are here:
+<?php else:?>
+&nbsp;
+<?php endif;?>
+<?php
+foreach ($this->pages as $page) {
+?>
+<li<?php echo $page->isActive() ? ' class="active"' : '';?>>
+<?php if ($page->isActive()):?>
+<?php echo $page->getLabel();?>
+<?php else:?>
+<a href="<?php echo $page->getHref()?>"><?php echo $page->getLabel();?></a>
+<?php endif;?>
+</li>
+<?php }?>
+<li class="pull-right toolbar">
+    <?php foreach ($toolbarLinks as $k=>$v):?>
+    <a href="<?php echo $v;?>" class="add_to_my_bookmarks"><?php echo $k;?></a>
+    <?php endforeach;?>
+</li>
+</ol>
+<?php endif;?>
+ -->
+<?php endif;?>
+<style>
+.toolbar {
+	width:150px;
+}
+.toolbar:before {
+	content: "" !important;
+}
+</style>

@@ -1,0 +1,103 @@
+<?php if ($this->pageCount): ?>
+        <ul class="pagination" style="float:left">
+        	<li>
+           		<form action="" method="get">
+					<label for="numberOfProducts">Records/Page</label>
+					<select class="perPageSelector" name="perpage" onchange="this.form.submit()">
+										<option value="20" <?php if($this->itemCountPerPage==20):?> selected="selected"<?php endif;?>>20</option>
+										<option value="40" <?php if($this->itemCountPerPage==40):?> selected="selected"<?php endif;?>>40</option>
+										<option value="60" <?php if($this->itemCountPerPage==60):?> selected="selected"<?php endif;?>>60</option>
+									</select>
+					<?php foreach($_GET as $getKey => $getValue):?>
+					<?php if($getKey!='perpage'):?>
+					<input type="hidden" name="<?php echo $getKey;?>" value="<?php echo $getValue;?>">
+					<?php endif;?>
+					<?php endforeach;?>				
+				</form>
+           </li>
+           
+        </ul>
+        
+        <ul class="pagination" style="float:right">
+           <?php 
+           		unset($_GET['page']);
+           		$build_uri = ''; 
+           	    if(!empty($_GET)){ 
+					$build_uri .= "&".http_build_query($_GET); 
+				} 
+           ?>
+           
+           
+            <!-- Previous page link -->
+            <?php if (isset($this->previous)): ?>
+				<li>
+                    <a href="<?php echo $this->url($this->route,$this->route_params); ?>?page=1<?php echo $build_uri; ?>">
+                        <<
+                    </a>
+                </li>            
+            
+                <li>
+                    <a href="<?php echo $this->url($this->route,$this->route_params); ?>?page=<?php echo $this->previous; ?><?php echo $build_uri; ?>">
+                        <
+                    </a>
+                </li>
+            <?php else: ?>
+            	<li class="disabled">
+                    <a href="#">
+                        <<
+                    </a>
+                </li>
+                <li class="disabled">
+                    <a href="#">
+                        <
+                    </a>
+                </li>
+            <?php endif; ?>
+            <!-- Numbered page links -->
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <?php if ($page != $this->current): ?>
+                    <li>
+                        <a href="<?php echo $this->url($this->route,$this->route_params);?>?page=<?php echo $page; ?><?php echo $build_uri; ?>">
+                            <?php echo $page; ?>
+                        </a>
+                    </li>
+                <?php else: ?>
+                    <li class="active">
+                        <a href="#"><?php echo $page; ?></a>
+                    </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <!-- Next page link -->
+            <?php if (isset($this->next)): ?>
+                <li>
+                    <a href="<?php echo $this->url($this->route,$this->route_params); ?>?page=<?php echo $this->next; ?><?php echo $build_uri; ?>">
+                        >
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="<?php echo $this->url($this->route,$this->route_params); ?>?page=<?php echo $this->pageCount; ?><?php echo $build_uri; ?>">
+                        >>
+                    </a>
+                </li>
+            <?php else: ?>
+                <li class="disabled">
+                    <a href="#">
+                        >
+                    </a>
+                </li>
+                
+                <li class="disabled">
+                    <a href="#">
+                        >>
+                    </a>
+                </li>
+            <?php endif; ?>
+            <li>
+            <p align="right">
+            Total number of pages: <?php echo $this->pageCount;?>
+            </p>
+            </li>
+        </ul>
+<?php endif; ?>

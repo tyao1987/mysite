@@ -1,0 +1,38 @@
+<?php
+	$user = $this->CheckLogin(); 
+	if(!$user):
+?>
+	<li class="active">
+		<?php 
+			$location = base64_encode($_SERVER['REQUEST_URI']);
+		?>
+		<a class="login" href="<?=$this->GetUrl('login',array(),array('location' => $location));?>">Login in</a>
+	</li>
+	<li class="active">
+		<a href="<?=$this->url('registration');?>">Register</a>
+	</li>
+<?php 
+	else:
+?>
+	<li class="active">
+		<a href="<?=$this->url('user_settings');?>"><?=$this->escapehtml($user->userName);?></a>
+	</li>
+	<li class="active">
+		<a href="<?=$this->url('logout');?>">Login out</a>
+	</li>
+<?php
+	endif;
+?>
+<!-- loginJsStart -->
+<script type="text/javascript">
+//<!--
+/*start of login*/
+(function($) {
+	$(document).on("click",".login",function(e){
+		
+	})
+})(jQuery);
+/*end of login*/
+//-->
+</script>
+<!-- loginJsEnd -->

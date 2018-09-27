@@ -1,0 +1,130 @@
+<?php
+use Zend\Form\Element;
+?>
+
+
+  
+<h3>Action List</h3>
+
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  <a href="/acl/action-edit"><span class="glyphicon glyphicon-plus"></span>Add Action</a>
+  </div>
+</div>
+
+<div class="panel panel-default">
+
+	<div class="panel-heading">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+    <h3 class="panel-title">Search <span class="glyphicon pull-right glyphicon-plus"></span></h3>
+    </a>
+  </div>
+
+  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel">
+  <div class="panel-body" >
+	
+	<form class="form-inline" role="form">
+  <div class="form-group">
+    
+    <label for="inputUsername" class="control-label">Controller:</label>
+    
+    	<?php 
+    		$element = new Element\Select("controller_id");
+    		
+    		$element->setValueOptions( 
+					$this->controllers
+    		);
+			
+			if($this->controller_id){
+				$element->setValue($this->controller_id);
+			}
+			$element->setAttributes(array(
+					'id'=>'controller_id',
+					'class'=>'form-control'
+			));
+			echo $this->formselect($element);
+    	?>
+    
+  </div>
+  
+  <div class="form-group">
+    <label for="inputStartDate" class="control-label">Action Name:</label>
+    
+    	<?php 
+    		$element = new Element\Text("action_name");
+    		if($this->action_name){
+    			$element->setValue($this->action_name);
+    		}
+    		$element->setAttributes(array(
+				'id'=>'action_name',
+				'class'=>'form-control'
+			));
+			echo $this->formtext($element);
+    	?>
+  </div>
+  
+  <div class="form-group">
+    
+      <button type="submit" class="btn btn-primary">Search</button>&nbsp;&nbsp;<a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "action-list"
+			    )); ?>">See All</a>
+  </div>
+</form>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+	<table  class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Module/Controller</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Action</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $action){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($action['id']); ?>  </td>
+			    <td> <?php echo $this->escapehtml($this->controllers[$action['controller_id']]); ?> </td>
+			    <td> <?php echo $this->escapehtml($action['name']); ?> </td>
+			    <td> <?php echo $this->escapehtml($action['description']); ?> </td>
+			    <td> 
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "action-edit",
+			    		"id" => $action['id']
+			    )); ?>">Edit</a>&nbsp;&nbsp;
+			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "action-delete",
+			    		"id" => $action['id']
+			    )); ?>">Delete</a>
+			    
+			    </td>
+			    
+			</tr>
+			<?php } ?>
+	</table>
+	
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'acl','action'=>'action-list'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div>

@@ -1,0 +1,96 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">My Dashboard</h3>
+  	</div>
+	<div class="panel-body">
+		<div class="form-group">
+		  	<div class="col-sm-10">
+		  		<div class="row">
+					<div class="col-lg-4">
+						<fieldset>
+							<legend>My Account</legend>
+					    	<form action="/acl/update-my-password" method="POST" class="updatePassword">
+					    		<div class="form-group row">
+					    			<div class="col-lg-12">
+							    		<label>
+											<span>
+												<input id="update_password" type="checkbox" name="update_password"/>
+											</span>
+											Update password?
+										</label>
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-3">
+										<span>Password:</span>
+									</div>
+									<div class="col-lg-9">
+										<input style="width:100%" type="password" class="form-control" name="password" id="password" value="">
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-lg-3">
+										<span>Confirm:</span>
+									</div>
+									<div class="col-lg-9">
+										<input style="width:100%" type="password" class="form-control" name="confirmation" id="confirmation" value="">
+									</div>
+								</div>      
+								<div class="form-group row">
+									<input type="submit" name="submit_password" id="submit_password" class="btn btn-primary btn-sm" value="Update My Password">
+								</div>
+							</form>
+						</fieldset>
+				    </div>	  
+					<div class="col-lg-6">
+						<fieldset>
+						    <legend>My Bookmarks</legend>
+						    <?php 
+						    	if($this->bookmarks):
+							?>
+						    <ul>
+						    <?php 
+						    	foreach ($this->bookmarks as $bookmark):?>
+						        <li><a href="/index/delete-bookmark/id/<?php echo $bookmark->id;?>">[x]</a> <a href="/<?php echo $this->CleanUri($bookmark->content, true, true);?>"><?php echo $bookmark->node;?></a></li>
+						    <?php
+							 	endforeach;
+							?>
+						    </ul>
+						    <?php 
+						    	else:
+						            echo 'You do not have any bookmarks.';
+						    	endif;
+						    ?>
+						</fieldset>  
+					</div>
+				</div>
+		  	</div>
+		</div>
+		<div class="form-group">
+		  	<div class="col-sm-10">
+				<fieldset>
+				    <legend>My Writeboard</legend>
+				    <p>The writeboard is a personal spot for you to keep notes about your site.</p>
+				    <form action="/index/notes" method="POST" id="notes">
+				        <textarea class="form-control" name="content" id="content" rows="24" cols="80"><?php echo $this->notes->content;?></textarea>
+				        <br/>
+				        <input class="btn btn-primary btn-sm" type="submit" name="submit" id="submit" value="Save My Writeboard">
+				    </form>    
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function($){
+	$(function(){
+		$("form.updatePassword").submit(function(){
+			if(!this.update_password.checked) {
+				alert("If you want to change password, please first select [Update password]");
+				return false;
+			}
+		});
+	});
+})(jQuery);
+
+</script>

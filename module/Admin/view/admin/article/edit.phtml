@@ -1,0 +1,122 @@
+<?php
+$disabled = '';
+$action = 'create';
+$isCreate = $this->isCreate ? 1 : 0;
+if(!$isCreate) {
+    $disabled = 'readonly="true"';
+    $action = 'update';
+}
+
+$form = $this->form;
+$form->prepare();
+$label = $this->plugin('formLabel');
+?>
+<!--  
+<?php if ($this->isEditStaticContent == true) :?>
+<script type="text/javascript" src="/scripts/admin/ckeditor/ckeditor.js">
+</script>
+<script type="text/javascript">
+(function($){
+	//CKEDITOR.config.toolbar = 'Basic';
+	CKEDITOR.config.language = 'en-gb';
+	CKEDITOR.config.toolbarCanCollapse = true;
+	CKEDITOR.config.contentsCss = ['http://images.pricerunner.com/styles/core.css', 'http://images.pricerunner.com/styles/override_<?php echo $this->siteName;?>.css'];
+	CKEDITOR.config.width = 1100;
+	CKEDITOR.config.height = 650;
+	CKEDITOR.config.useComputedState = false
+	CKEDITOR.config.fillEmptyBlocks = false;
+	CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
+	CKEDITOR.config.shiftEnterMode = CKEDITOR.ENTER_P;
+	CKEDITOR.config.tabSpaces = 0;
+	<?php if ($this->editSuggestion == true):?>
+		CKEDITOR.config.startupMode = 'source';
+	<?php endif;?>
+	CKEDITOR.config.toolbar_Full =
+		[
+			{ name: 'document',		items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },
+			{ name: 'tools',		items : [ 'Maximize', 'ShowBlocks','-','About' ] },
+			{ name: 'clipboard',	items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+			{ name: 'editing',		items : [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ] },
+			{ name: 'forms',		items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+			{ name: 'basicstyles',	items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+			{ name: 'paragraph',	items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+			{ name: 'links',		items : [ 'Link','Unlink','Anchor' ] },
+			{ name: 'insert',		items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+			{ name: 'styles',		items : [ 'Styles','Format','Font','FontSize' ] },
+			{ name: 'colors',		items : [ 'TextColor','BGColor' ] }
+
+		];
+	//CKEDITOR.config.format_div = { element : 'div', attributes : { 'class' : 'normalDiv' } };
+	CKEDITOR.on( 'instanceReady', function( ev ){
+	     with (ev.editor.dataProcessor.writer) {
+	       setRules("p",  {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("h1", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("h2", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("h3", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("h4", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("h5", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("div", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("table", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("tr", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("td", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("iframe", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("li", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("ul", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	       setRules("ol", {indent : true, breakBeforeOpen : true, breakAfterOpen : true, breakBeforeClose : true, breakAfterClose : true} );
+	     }
+	})
+})(jQuery)
+</script>
+<?php endif;?>
+-->
+<div class="panel panel-default">
+<div class="panel-body">
+<?php echo $this->form()->openTag($form);?>
+<?php echo $this->formHidden($form->get('isCreate'));?>
+<?php echo $this->formHidden($form->get('aid'));?>
+<?php echo $this->formHidden($form->get('action'));?>
+<?php echo $this->formHidden($form->get('type'));?>
+<?php echo $this->formHidden($form->get('referer'));?>
+  <div class="form-group">
+    <label for="name">name (the name should be [-_0-9a-zA-Z.%]):</label>
+    <?php echo $this->formText($form->get('name'))?>
+  </div>
+  <div class="form-group">
+    <label for="description">description:</label>
+    <?php echo $this->formText($form->get('description'));?>
+  </div>
+  <?php if ($this->type == 'FILE' || $this->type == 'VERSION'):?>
+      <div class="checkbox">
+      <label for="ishide">
+      <?php echo $this->formcheckbox($form->get('ishide'));?>
+      ishide</label>
+      </div>
+      <?php if ($this->type == 'VERSION') :?>
+          <div class="form-group">
+            now version: <? echo $this->row['versionid']?>
+                <?php if ($this->isnewversion!=1) :?>
+                <a href="/article/makecurrent?vid=<? echo $this->row['versionid']?>&type=VERSION">Set as active version</a>
+                <?php endif;?>
+           </div>
+     <?php else:?>
+            <div class="form-group">
+            now version: <?php echo $this->row['version']?> <a href="/article/version?aid=<?php echo $this->row['id'];?>">view history</a>
+            </div>
+      <?php endif;?>
+
+
+	<div class="form-group">
+      <label for="content">content: </label>
+			<!--<?php if ($this->editSuggestion == true) :?>
+				<span>please don't change the display from HTML to SOURCE</span><br />
+			<?php endif;?>-->
+			<?php echo $this->formtextarea($form->get('content'));?>
+    </div>
+  <?php endif;?>
+  <?php if ($this->type !== 'VERSION') :?>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="button" class="btn btn-default" name="cancel" value="cancel" onclick="window.location='<?php echo $_GET['referer'] ? $_GET['referer'] : $_SERVER['HTTP_REFERER'];?>'">cancel</button>
+  <?php endif;?>
+  <?php echo $this->form()->closeTag() ?>
+</div>
+</div>

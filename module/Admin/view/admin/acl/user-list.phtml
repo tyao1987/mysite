@@ -1,0 +1,68 @@
+<?php
+use Zend\Form\Element;
+?>
+
+<h3 >User List</h3>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  <a href="/acl/user-add"><span class="glyphicon glyphicon-plus"></span>Add User</a>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+	<table  class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>EMAIL</th>
+				<th>Action</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $user){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($user['id']); ?>  </td>
+			    <td> <?php echo $this->escapehtml($user['first_name']).'&nbsp;'. $this->escapehtml($user['last_name']); ?> </td>
+			    <td> <?php echo $this->escapehtml($user['email']); ?> </td>
+			    <td> 
+			    	
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "user-manage",
+			    		"id" => $user['id']
+			    )); ?>">Manage</a>&nbsp;&nbsp;
+			    			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "user-delete",
+			    		"id" => $user['id']
+			    )); ?>">Delete</a>&nbsp;&nbsp;
+			    
+			    
+			    
+			    </td>
+			    
+			</tr>
+			<?php } ?>
+	</table>
+	
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'acl','action'=>'user-list'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div>
+</div>

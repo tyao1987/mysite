@@ -1,0 +1,23 @@
+<div class="member-wrapper">
+<?php
+	if($keyInValid):
+?>
+    <h1>Email Reset</h1>
+    Sorry, the link you used to get here was either invalid or expired.
+<?php
+	else:
+?>
+   	<p class="error-text" id="errors">
+   	<?php
+   		foreach ($status as $item):
+   	?>
+   		<?=$item?><br />
+   	<?php
+   		endforeach;
+   	?>
+   	</p>
+<?php
+	endif;
+?>
+
+</div>

@@ -1,0 +1,79 @@
+<?php
+use Zend\Form\Element;
+?>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">EDIT LANG</h3>
+  </div>
+  <?php echo $this->render("layout/udferror"); ?>
+  <div class="panel-body">
+  		<form class="form-horizontal" role="form" action=""  method="post">
+  		
+		  <div class="form-group">
+		    <label for="inputId" class="col-sm-2 control-label">Key:</label>
+		    <div class="col-sm-10">
+		    	<?php 
+		    	    // Hidden input:ID
+		    		$element = new Element\Hidden("id");
+		    		$element->setValue($this->id);
+		    		echo $this->formhidden($element);
+		    		
+		    		$element = new Element\Text("lang");
+		    		$element->setAttributes(array(
+		    				'class'=>'form-control',
+							'required'=>'required'
+		    		));
+					if($this->lang){
+						$element->setValue($this->lang);
+					};
+					$this->error && is_array($this->error['lang']) && $element->setMessages($this->error['lang']);
+					echo $this->formtext($element);
+					
+					echo $this->formelementerrors($element, array (
+							'class' => 'alert alert-warning'
+					));
+		    	?> 	
+		    </div>
+		  </div>
+<?php foreach ($this->languages as $key =>$value): ?>
+		<div class="form-group">
+		   <label for="inputId" class="col-sm-2 control-label"><?php echo $value; ?>:</label>
+		   <div class="col-sm-10">
+		    	<?php 
+		    		$element = new Element\Textarea($value);
+		    		$element->setAttributes(array(
+		    				'class'=>'form-control',
+							//'required'=>'required'
+		    		));
+					if($this->$value){
+						$element->setValue($this->$value);
+					};
+					$this->error && is_array($this->error[$value]) && $element->setMessages($this->error[$value]);
+					echo $this->formtextarea($element);
+					echo $this->formelementerrors($element, array (
+							'class' => 'alert alert-warning'
+					));
+		    	?> 	
+		    </div>
+		  </div>
+<?php endforeach; ?>		
+		
+		<div class="form-group">
+		  <label for="inputId" class="col-sm-2 control-label"></label>
+		  	<div class="col-sm-10">
+		    	<?php 	    		
+		    		$element = new Element\Submit("search");
+		    		$this->id ? $element->setValue("Update") : 
+		    		$element->setValue("Add");
+		    		$element->setAttributes(array(
+		    				'class'=>'btn btn-primary btn-lg btn-block',
+							'style'=>'width: 20%'
+		    		));
+		    		echo $this->formsubmit($element);
+		    	?><a href="/translation/list">See All</a>
+		    </div>
+		  </div>
+		</form>
+</div>
+</div>

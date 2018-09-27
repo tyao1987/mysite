@@ -1,0 +1,114 @@
+<?php
+use Zend\Form\Element;
+?>
+
+
+<h3>SiteGroup List</h3>
+
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  <a href="/acl/site-group-edit"><span class="glyphicon glyphicon-plus"></span>Add SiteGroup</a>
+  </div>
+</div>
+
+<div class="panel panel-default">
+
+	<div class="panel-heading">
+    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+    <h3 class="panel-title">Search <span class="glyphicon pull-right glyphicon-plus"></span></h3>
+    </a>
+  </div>
+
+  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel">
+  <div class="panel-body">
+	<div class="panel-default">
+	<form class="form-inline" role="form">
+  
+  <div class="form-group">
+    <label for="inputStartDate" class=" control-label">SiteGroup Name:</label>
+    
+    	<?php 
+    		$element = new Element\Text("name");
+    		if($this->name){
+    			$element->setValue($this->name);
+    		}
+    		$element->setAttributes(array(
+				'id'=>'name',
+				'class'=>'form-control'
+			));
+			echo $this->formtext($element);
+    	?>
+    
+  </div>
+  
+  <div class="form-group">
+    
+      <button type="submit" class="btn btn-primary">Search</button>&nbsp;&nbsp;<a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "site-group-list"
+			    )); ?>">See All</a>
+    
+  </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+	<table  class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Action</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $siteGroup){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($siteGroup['id']); ?>  </td>
+			    <td> <?php echo $this->escapehtml($siteGroup['name']); ?> </td>
+			    <td> <?php echo $this->escapehtml($siteGroup['description']); ?> </td>
+			    <td> 
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "site-group-edit",
+			    		"id" => $siteGroup['id']
+			    )); ?>">Edit</a>&nbsp;&nbsp;
+			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "site-group-delete",
+			    		"id" => $siteGroup['id']
+			    )); ?>">Delete</a>&nbsp;&nbsp;
+			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "site-group-manage",
+			    		"id" => $siteGroup['id']
+			    )); ?>">Manage</a>
+			    
+			    </td>
+			    
+			</tr>
+			<?php } ?>
+	</table>
+	
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'acl','action'=>'site-group-list'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div>

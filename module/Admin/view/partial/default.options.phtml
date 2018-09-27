@@ -1,0 +1,117 @@
+<?php
+use Test\Data;
+use Admin\Model\Auth;
+use Admin\Model\User;
+use Admin\Util\Util;
+$data = Data::getInstance();
+$controller = $data->get('controller');
+$action = $data->get('action');
+$rootMenu = array('site', 'article', 'memcache', 'suggestionlog', 'index');
+?>
+<style type="text/css">
+.nav-child{
+    padding-left: 20px;
+}
+.nav-child>li>a{
+    padding: 5px 20px;
+}
+.nav-child>li>a.active, .nav-child>li>a.active:hover, .nav-child>li>a.active:focus {
+    background-color: #428bca;
+    color: #fff;
+}
+.list-group a {padding-left:48px;}
+.list-group a.active {background-color:#fff;color:#428bca;border-color:#ddd;}
+.list-group a.active:hover {background-color:#f5f5f5;border-color:#ddd;color:#428bca;}
+.list-group a.root-item {background-color:#eee;padding:10px 15px;color:#777;}
+.left-nav .glyphicon-plus, .left-nav .glyphicon-minus { 
+    font-size: 9px; 
+    top: 5px; 
+}
+</style>
+<?php if ($controller == 'auth'):?>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">FORGOT PASSWORD</h4>
+  </div>
+  <div class="panel-body">
+<form action="/auth/reset-password" class="form-signin"  role="form" method="POST">
+<p class="form-signin-heading">If you are having trouble logging in please enter
+	your email address below and we will send you your login credentials. </p>
+	<div class="form-group">
+<?php
+
+$element = new Zend\Form\Element\Email ( "email" );
+$element->setAttributes(array(
+	'class' => 'form-control'
+));
+$element->setAttribute('style', "width:100%");
+echo $this->formemail ( $element );
+?>
+	</div>
+	<div class="form-group">
+<?php
+
+$element = new Zend\Form\Element\Submit ( "reminder" );
+$element->setValue ( "Reset Password" );
+$element->setAttribute ( "class", "btn btn-large" );
+$element->setAttribute("class", "form-control");
+$element->setAttribute("style", "width:100%");
+echo $this->formsubmit ( $element );
+?>
+</div>
+</form>
+</div>
+</div>
+<?php else:?>
+<div class="list-group left-nav" style="cursor:pointer;">
+<?php foreach ($pages as $page): ?>
+  <?php 
+  $subMenu = '';
+  $isShow = 0;
+  if (!empty($page['pages']) && $page['controller'] != 'site') {
+  	 foreach ($page['pages'] as $subpage) {
+        if (!Util::checkActionPermission($subpage['resource'], $resources)) {
+        	continue;
+        }
+//         $active = $subpage->isActive() ? ' active' : '';
+        $resource = 'admin_'.$controller.'_'.$action;
+        $active = $resource == $subpage['resource'] ? ' active' : '';
+        if (!empty($active) && $isShow == 0) {
+        	$isShow = 1;
+        }
+        $link = str_replace(array('admin_', '_'), '/', $subpage['resource']);
+  	 	$subMenu .= '<a href="'.$link.'" class="list-group-item'.$active.'">'.$subpage['label'].'</a>';
+  	 }
+  }
+  if (!empty($subMenu) || in_array($page['controller'], $rootMenu)) {
+    if (in_array($page['controller'], $rootMenu)) {
+        if (!Util::checkActionPermission($page['resource'], $resources)) {
+            continue;
+        }
+        $link = str_replace(array('admin_', '_'), '/', $page['resource']);
+        $resource = 'admin_'.$controller.'_'.$action;
+        $selected = $resource == $page['resource'] ? 'color:#428bca;' : '';
+//         $html = '<span class="list-group-item disabled"><a style="padding-left:0;'.$selected.'" href="' .$link. '">'.$page['label'].'</a></span>';
+        $html = '<a class="list-group-item root-item" style="'.$selected.'" href="' .$link. '">'.$page['label'].'</a>';
+    } else {
+        $html = '<span class="list-group-item disabled">'.$page['label'].'<span class="glyphicon '.($isShow ? 'glyphicon-minus' : 'glyphicon-plus').' pull-right"></span></span>';
+    }
+  	echo $html.'<div'. ($isShow ? '' : ' style="display:none;"') . '>'.$subMenu.'</div>';
+  }
+  ?>
+<?php endforeach;?>
+</div>
+<?php endif;?>
+<script>
+$(function(){
+// 	$(".sidebar ul.nav").find('ul').removeClass('nav-sidebar').addClass('nav-child');
+	$(".list-group span").click(function(){
+		 $(this).next('div').fadeToggle('fast');
+		 if ($(this).find('span').hasClass('glyphicon-plus')) {
+			 $(this).find('span').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+		} else {
+			$(this).find('span').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+		}
+	});
+})
+</script>

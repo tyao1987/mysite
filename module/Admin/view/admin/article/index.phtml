@@ -1,0 +1,177 @@
+<?php
+use Test\Data;
+$folder = "http://images.pricerunner.com/images/i/folder.gif";
+$openfolder  = "http://images.pricerunner.com/images/i/openfolder.gif";
+$data = Data::getInstance();
+$params = $data->get('pageParams');
+$aid = $_GET['aid'] ? intval($_GET['aid']) : 1;
+?>
+
+    <h3>ARTICLE LIST</h3>
+  
+  <div class="panel panel-default">
+  <div class="panel-body">
+  <a href="/article/add?aid=<?php echo $aid;?>&type=DIRECTORY"><span class="glyphicon glyphicon-plus"></span>Create a directory</a>
+  &nbsp;<a href="/article/add?aid=<?php echo $aid;?>&type=FILE"><span class="glyphicon glyphicon-plus"></span>Create a new article</a>
+  </div>
+  </div>
+  <div class="panel panel-default">
+      <div class="panel-heading">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed">
+	    <h3 class="panel-title">Search <span class="glyphicon pull-right glyphicon-plus"></span></h3>
+	    </a>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse" role="tabpanel">
+      <div class="panel-body">
+        <form name="search" class="form-inline" role="form" action="/article" method="get">
+        <input type="hidden" name="aid" value="<?php echo $this->aid?>">
+          <div class="form-group">
+            <label class="sr-only" for="Name">Name:</label>
+            <input value="<?php echo $params['name'];?>" type="text" name="name" class="form-control" id="name" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-addon">Visible:</div>
+              <select class="form-control"  name="ishide" id="hide">
+                <option value=2>Not select</option>
+                <option value=0>YES</option>
+                <option value=1>NO</option>
+                <!-- <option value=2 <?if( $params['ishide'] == 2){echo "selected";}?> >ALL</option>
+                <option value=0 <?if( $params['ishide'] == 0){echo "selected";}?> >YES</option>
+                <option value=1 <?if( $params['ishide'] == 1){echo "selected";}?> >NO</option> -->
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Search</button>
+          <div class="form-group pull-right">
+            <select class="form-control" name="sort" id="sort">
+                <option value="name"<?php echo $params['sort'] == 'name' ? ' selected="selected"' : '';?>>sort by name</option>
+                <option value="id"<?php echo $params['sort'] == 'id' ? ' selected="selected"' : '';?>>sort by id</option>
+            </select>
+          </div>
+          </form>
+          </div>
+      </div>
+  </div>
+  <div class="panel panel-default">
+  <div class="panel-body">
+  <form method="get" name="sortForm">
+  <input type="hidden" name="sort" value="name" />
+  <input type="hidden" name="aid" value="<?php echo $this->aid?>">
+	<table  class="table table-striped">
+			<tr>
+				<th>ArticleID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>version</th>
+				<th>isHide
+				<select name="ishide" onchange="this.form.submit();">
+	<option VALUE="0" <? if(isset($params['ishide']) && $params['ishide'] == 0) {echo "selected";}?>>0</option>
+	<option VALUE="1" <? if(isset($params['ishide']) && $params['ishide'] == 1) {echo "selected";}?>>1</option>
+	<option VALUE="2" <? if($params['ishide'] == 2) {echo "selected";}?>>all</option>
+  </select>
+				</th>
+				<th>Operation</th>
+			</tr>
+			 <?php foreach ($this->lists as $article){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($article['id']); ?>  </td>
+			    <td> <?php echo $article['type']=='FILE'?'':'<img src='.$folder.'> '; ?>
+			        <?php if($article['type']=='FILE'):?>
+				    <?php echo $this->escapehtml($article['name']);?>
+					<?php else:?>
+						<a href="/article?aid=<?echo $article['id'];?>">
+						<?php echo $this->escapehtml($article['name']);?></a>
+					<?php endif;?>
+			     </td>
+			    <td> <?php echo $this->escapehtml($article['description']); ?> </td>
+			    <td><a href="/article/version?aid=<?php echo $article['id']?>"><?php echo $this->escapehtml($article['version']); ?></a> </td>
+			    <td>
+					<?php echo $this->escapehtml($article['ishide']); ?>&nbsp;&nbsp;
+    			    <?php
+    			     if ($article['type'] == 'FILE') {
+    			     	if ($article['ishide'] == 0) {
+    			     		echo "<a href='/article/active?aid={$article['id']}&ishide=1&type=FILE'>Hide</a>";
+    			     	} else {
+    			     		echo "<a href='/article/active?aid={$article['id']}&ishide=0&type=FILE'>Show</a>";
+    			     	}
+    			     }
+    			     if ($article['type'] == 'DIRECTORY') {
+    			     	if ($article['ishide'] == 0) {
+                            echo "<a href='/article/active?aid={$article['id']}&ishide=1&type=DIRECTORY'>Hide</a>";
+                        } else {
+                            echo "<a href='/article/active?aid={$article['id']}&ishide=0&type=DIRECTORY'>Show</a>";
+                        }
+    			     }
+    			    ?>
+			     </td>
+			    <td>  <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"article",
+			    		"action" => "edit",
+			    )); ?>?aid=<?php echo $article['id'];?>&type=<?php echo $article['type']=='FILE' ? 'FILE' : 'DIRECTORY';?>">Edit</a>&nbsp;&nbsp;
+			    <?php if ($article['type'] == 'FILE'):?>
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"article",
+			    		"action" => "delete",
+			    )); ?>?aid=<?php echo $article['id'];?>&type=FILE">delete</a>
+			    <?php else:?>
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"article",
+			    )); ?>?aid=<?php echo $article['id'];?>">Enter</a>
+			    <?php endif;?>
+			    </td>
+			</tr>
+			<?php } ?>
+	</table>
+    </form>
+	<?php
+
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'article','action'=>'index'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+
+	?>
+</div>
+</div>
+
+<script>
+$(function(){
+	   $("#sort").change(function(){
+		   var sort = $(this).val();
+		   $("form[name='sortForm'] input[name='sort']").val(sort);
+		   $("form[name='sortForm']").submit();
+	   });
+//     $("select[name='ishide']").change(function(){
+//         var value = $(this).val();
+//         if (value == 0) {
+//             $("form[name='search'] select[name='ishide'] option").removeAttr('selected');
+//             $("form[name='search'] select[name='ishide'] option[value='0']").attr('selected', true);
+//         }
+//         if (value == 1) {
+//         	$("form[name='search'] select[name='ishide'] option").removeAttr('selected');
+//             $("form[name='search'] select[name='ishide'] option[value='1']").attr('selected', true);
+//         }
+//         if (value == 2) {
+//         	$("form[name='search'] select[name='ishide'] option").removeAttr('selected');
+//             $("form[name='search'] select[name='ishide'] option[value='2']").attr('selected', true);
+//         }
+//         $("form[name='search']").submit();
+//     });
+    $('tr').hover(function(){
+	    $(this).addClass('info');
+	}, function(){
+	    $(this).removeClass('info');
+	});
+})
+</script>

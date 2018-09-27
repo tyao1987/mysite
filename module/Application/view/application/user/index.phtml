@@ -1,0 +1,30 @@
+<div class="wrapper">
+    <div id="maincontent">
+        <?php
+        	if($route == 'registration'):
+        		echo $this->render('application/user/registration.phtml');
+        	elseif($route == 'try_registration'):
+        		echo $this->render($this->template);
+        	elseif($route == 'active_user'):
+        		echo $this->render('application/user/active-registration.phtml');
+        	elseif($route == 'login'):
+        		echo $this->render('application/user/login.phtml');
+        	elseif($route == 'send_activation_email'):
+        		echo $this->render('application/user/resend-activation-email.phtml');
+        	elseif($route == 'password_recovery'):
+        		echo $this->render('application/user/password-recovery.phtml');
+        	elseif($route == 'password_reset'):
+        		echo $this->render('application/user/password-reset.phtml');
+        	elseif($route == 'user_settings'):
+        		echo $this->render('application/user/user-settings.phtml');
+        	endif;
+        	
+        ?>
+	</div>
+   
+    <div id="side-content">
+    	<div class="side-ad adWrapper invisible">
+		</div>
+    </div>
+    <!-- end side-content -->
+</div>

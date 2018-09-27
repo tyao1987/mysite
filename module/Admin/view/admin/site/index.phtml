@@ -1,0 +1,343 @@
+<?php 
+use Zend\Form\Element;
+use Zend\Form\Form;
+$Checkbox  = new Element\Checkbox() ;
+//$Checkbox->setAttributes(array('class' => 'form-control')) ;
+$text      = new Element\Text() ;
+$text->setAttributes(array('class' => 'form-control')) ;
+$select    = new Element\Select() ;
+$select->setAttributes(array('class' => 'form-control')) ;
+$radio     = new Element\Radio() ;
+$radio->setAttributes(array('style' => 'margin-left:10px;')) ;
+$textarea  = new Element\Textarea() ;
+$textarea->setAttributes(array('class' => 'form-control')) ;
+$submit    = new Element\Submit();
+//$submit->setAttributes(array('class' => 'btn btn-primary btn-lg btn-block')) ;
+$submit->setAttributes(array('class' => 'btn btn-primary btn-lg')) ;
+?>
+<?php $this->placeholder("formHeadline")->set($this->GetTranslation("Update Site Settings"));?>
+
+<?$this->Doctype('XHTML1_TRANSITIONAL'); //let the zend_form output corret xhtml?>
+
+<style type="text/css">
+    .nav-sidebar > li > a{padding: 7px 20px;}
+    .table > thead > tr > th, 
+    .table > tbody > tr > th, 
+    .table > tfoot > tr > th, 
+    .table > thead > tr > td, 
+    .table > tbody > tr > td, 
+    .table > tfoot > tr > td{vertical-align:middle;}
+</style>
+
+<div class="tab-content">
+	<form action="/site/edit" method="post" id='cms' class="tab-pane active">
+		<fieldset>
+	    	<legend><?php echo $this->GetTranslation('Site CMSDB Data');?></legend>
+	      	<table class="table table-striped table-condensed">
+	        	<tr>
+	            	<td text-align="right" width="30%"><?php echo $this->GetTranslation('Host Name');?></td>
+	              	<td width="20">
+	                <?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[host_name]'))
+	                                                          ->setCheckedValue(1)
+	                                                          ->setChecked((int)$this->enabled['host_name'])
+	                                                 );?>
+	              	</td>
+	              	<td>
+	              	<?php echo $this->FormText($text->setAttributes(array(
+	                                                                	'name'=>'setting[host_name]' , 
+	                                                                    'value' => $this->settings['host_name']
+	                                                               		)
+	                                                               	)
+	                                          );?>
+	              	</td>
+	          	</tr>
+	        	<tr>
+	            	<td text-align="right" width="30%"><?php echo $this->GetTranslation('Short Name');?></td>
+	              	<td width="20">
+	                <?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_name]'))
+	                                                          ->setCheckedValue(1)
+	                                                          ->setChecked((int)$this->enabled['site_name'])
+	                                                 );?>
+	              	</td>
+	              	<td>
+	              	<?php echo $this->FormText($text->setAttributes(array(
+	                                                                	'name'=>'setting[site_name]' , 
+	                                                                    'value' => $this->settings['site_name']
+	                                                               		)
+	                                                               	)
+	                                          );?>
+	              	</td>
+	          	</tr>
+	          	<tr>
+              		<td><?php echo $this->GetTranslation('Site Type');?></td>
+              		<td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_type]'))
+                                                          ->setCheckedValue(1)
+                                                          ->setChecked((int)$this->enabled['site_type'])
+                                                );?>
+              		</td>
+              		<td>	
+              			<?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_type]'))
+                                                    ->setValueOptions($this->siteType)
+                                                    ->setValue($this->settings['site_type'])
+                                            );?>
+              		</td>
+          		</tr> 
+		        <tr>
+		        	<td><?php echo $this->GetTranslation('Site Display name');?></td>
+		            <td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_display_name]'))
+		                                                          ->setCheckedValue(1)
+		                                                          ->setChecked((int)$this->enabled['site_display_name'])
+		                                                );?>
+		            </td>
+		            <td><?php echo $this->FormText($text->setAttributes(array(
+		                                                               		'name'=>'setting[site_display_name]' , 
+		                                                                    'value' => $this->settings['site_display_name']
+		                                                                     )
+		                                                                )
+		                                          );?>
+		            </td>
+		        </tr> 
+	          	<tr>
+	              	<td><?php echo $this->GetTranslation('Site Country');?></td>
+	              	<td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_country]'))
+	                                                          ->setCheckedValue(1)
+	                                                          ->setChecked((int)$this->enabled['site_country'])
+	                                                );?>
+	              	</td>
+	              	<td>
+	              	
+	                <?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_country]'))
+	                                                    ->setValueOptions($this->country)
+	                                                    ->setValue($this->settings['site_country'])
+	                                            );?>
+	              	</td>
+	          	</tr>
+	          	<tr>
+	            	<td><?php echo $this->GetTranslation('Currency');?></td>
+	              	<td>
+	                <?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_currency]'))
+	                                                          ->setCheckedValue(1)
+	                                                          ->setChecked((int)$this->enabled['site_currency'])
+	                                                );?>
+	              	</td>
+	              	<td>
+	                <?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_currency]'))
+	                                                    ->setValueOptions($this->currency)
+	                                                    ->setValue($this->settings['site_currency'])
+	                                            );?>
+	              	</td>
+	          	</tr>
+	          	<tr>
+	              	<td><?php echo $this->GetTranslation('Language');?></td>
+	
+	              	<td>
+	                <?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_language]'))
+	                                                          ->setCheckedValue(1)
+	                                                          ->setChecked((int)$this->enabled['site_language'])
+	                                                );?>
+	              	</td>
+	              	<td>
+	                <?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_language]'))
+	                                                    ->setValueOptions($this->language)
+	                                                    ->setValue($this->settings['site_language'])
+	                                            );?>
+	              	</td>
+	          	</tr>
+	          	
+				<tr>
+              		<td><?php echo $this->GetTranslation('Frontend DB');?></td>
+
+              		<td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_frontend_db]'))
+                                                          ->setCheckedValue(1)
+                                                          ->setChecked((int)$this->enabled['site_frontend_db'])
+                                                );?>
+              		</td>
+              		
+              		<td>
+              			<?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_frontend_db]'))
+	                                                    ->setValueOptions($this->frontendDB)
+	                                                    ->setValue($this->settings['site_frontend_db'])
+	                                            );?>
+              		</td>
+          		</tr>
+          		<tr>
+              		<td><?php echo $this->GetTranslation('Backend DB');?></td>
+
+              		<td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_backend_db]'))
+                                                          ->setCheckedValue(1)
+                                                          ->setChecked((int)$this->enabled['site_backend_db'])
+                                                );?>
+              		</td>
+              		
+              		<td>
+              			<?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_backend_db]'))
+	                                                    ->setValueOptions($this->backendDB)
+	                                                    ->setValue($this->settings['site_backend_db'])
+	                                            );?>
+              		</td>
+          		</tr>
+          		<!--  <tr>
+              		<td><?php echo $this->GetTranslation('Site Active');?></td>
+
+              		<td>
+                  		<?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_active]'))
+                                                          ->setCheckedValue(1)
+                                                          ->setChecked((int)$this->enabled['site_active'])
+                                                );?>
+              		</td>
+              		<td>
+                  		<?php echo $this->FormRadio($radio->setAttributes(array('name'=>'setting[site_active]'))
+                                                    ->setValueOptions(array('YES'=>'Yes', 'NO'=>'No'))
+                                                    ->setValue($this->settings['site_active'])
+                                            );?>
+              		</td>
+          		</tr> -->              
+	          	<!-- Update Button -->
+	          	<tr>
+	            	<td colspan="3">
+	              	<?php echo $this->FormSubmit($submit->setAttributes(array('name' => 'generalProperties' , 'id' => 'generalProperties'))
+	                                                  ->setValue('Update Site CMSDB Properties'));?>
+	            	</td>
+	          	</tr>
+	    	</table>
+	  	</fieldset>
+	</form>
+	
+	<form action="/site/edit" method="post" id='basic' class="tab-pane">
+		<fieldset>
+	    	<legend><?php echo $this->GetTranslation('Basic Configuration');?></legend>
+	      	<table class="table table-striped table-condensed">
+	          	<tr>
+	              	<td><?php echo $this->GetTranslation('Locale');?></td>
+	
+	              	<td>
+	                <?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_locale]'))
+	                                                          ->setCheckedValue(1)
+	                                                          ->setChecked((int)$this->enabled['site_locale'])
+	                                                );?>
+	              	</td>
+	              	<td>
+	                <?php echo $this->FormSelect($select->setAttributes(array('name'=>'setting[site_locale]'))
+	                                                    ->setValueOptions($this->locale)
+	                                                    ->setValue($this->settings['site_locale'])
+	                                            );?>
+	              	</td>
+	          	</tr>
+	          	<tr>
+		        	<td><?php echo $this->GetTranslation('Timezone');?></td>
+		            <td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_timezone]'))
+		                                                          ->setCheckedValue(1)
+		                                                          ->setChecked((int)$this->enabled['site_timezone'])
+		                                                );?>
+		            </td>
+		            <td><?php echo $this->FormText($text->setAttributes(array(
+		                                                                    'name'=>'setting[site_timezone]' , 
+		                                                                    'value' => $this->settings['site_timezone']
+		                                                                       )
+		                                                                  )
+		                                            );?>
+		            </td>
+	          	</tr>
+	          
+	          	<tr>
+              		<td><?php echo $this->GetTranslation('Date format');?></td>
+
+              		<td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[review_date_format]'))
+                                                          ->setCheckedValue(1)
+                                                          ->setChecked((int)$this->enabled['review_date_format'])
+                                                );?>
+              		</td>
+              		<td><?php echo $this->FormText($text->setAttributes(array(
+                                                                          'name'=>'setting[review_date_format]' , 
+                                                                          'value' => $this->settings['review_date_format']
+                                                                       )
+                                                                  )
+                                            );?>
+              		</td>
+          		</tr>
+          		
+          		<tr>
+              		<td><?php echo $this->GetTranslation('Skin');?></td>
+              		<td><?php echo $this->FormCheckbox($Checkbox->setAttributes(array('name'=>'enabled[site_skin]'))
+                                                          ->setCheckedValue(1)
+                                                          ->setChecked((int)$this->enabled['site_skin'])
+                                                );?>
+              		</td>
+              		<td><?php echo $this->FormText($text->setAttributes(array(
+                                                                          'name'=>'setting[site_skin]' , 
+                                                                          'value' => $this->settings['site_skin']
+                                                                       )
+                                                                  )
+                                            );?>
+              		</td>
+          		</tr>
+          		
+	          	<!-- Update Button -->
+	          	<tr>
+	            	<td colspan="3">
+	              	<?php echo $this->FormSubmit($submit->setAttributes(array('name'=>'basic' , 'id' => 'basic'))
+	                                                  ->setValue('Update Basic Configuration'));?>
+	            	</td>
+	          	</tr>
+	    	</table>
+	  	</fieldset>
+	</form>
+	
+</div>
+<script type="text/javascript">
+
+
+    function changeDisabled(el,tdNum){
+        el.each(function(){
+            if(!$(this).attr('checked')){
+                $(this).parents("tr").find('td:nth-child('+tdNum+')').find("input, select, textarea").attr('disabled', 'disabled');
+            }
+        });
+
+        el.click(function(){
+            $(this).parents("tr").find('td:nth-child('+tdNum+')').find("input, select, textarea").attr('disabled', !$(this).is(":checked"));
+        });
+    }
+
+    function changeChecked(adcheckboxValue,adradioList){
+        
+        adradioList.each(function(){
+          
+          if(adcheckboxValue == $(this).val()){
+              $(this).prop('checked',true);
+          }
+            /*if (1 == adcheckboxValue){
+                //enabled
+                if (1 == $(this).val()){
+                    $(this).attr('checked',true);
+                }
+            }else{
+                //disabled
+                if (1 != $(this).val()){
+                    $(this).attr('checked',true);
+                }
+            }*/
+        });
+    }
+
+    $(function(){
+        $('#myTab a').click(function (e) {
+          e.preventDefault() ;
+          $(this).tab('show') ;
+        }) ;
+        $('#myTab a:first').tab('show') ;
+    }) ;
+
+    (function($){
+        $(function(){
+
+            var el = $("table.table").find('tr:not(:last) td:nth-child(2) input:checkbox');
+            changeDisabled(el,3);
+            
+            var el2 = $("table.table").find('tr:not(:last) td:nth-child(5) input:checkbox');
+            changeDisabled(el2,6);
+
+           
+        });
+    })(jQuery);
+</script>

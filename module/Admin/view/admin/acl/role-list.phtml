@@ -1,0 +1,74 @@
+<?php
+use Zend\Form\Element;
+?>
+
+
+
+<h3>Role List</h3>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+  <a href="/acl/role-edit"><span class="glyphicon glyphicon-plus"></span>Add Role</a>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+	<table  class="table table-striped">
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Action</th>
+			</tr> 
+			 <?php foreach ($this->paginator as $role){ ?>
+			<tr>
+			    <td> <?php echo $this->escapehtml($role['id']); ?>  </td>
+			    <td> <?php echo $this->escapehtml($role['name']); ?> </td>
+			    <td> <?php echo $this->escapehtml($role['description']); ?> </td>
+			    <td> 
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "role-edit",
+			    		"id" => $role['id']
+			    )); ?>">Edit</a>&nbsp;&nbsp;
+			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "role-delete",
+			    		"id" => $role['id']
+			    )); ?>">Delete</a>&nbsp;&nbsp;
+			    
+			    <a href="<?php echo $this->url("default",array(
+			    		"controller"=>"acl",
+			    		"action" => "role-manage",
+			    		"id" => $role['id']
+			    )); ?>">Manage</a>&nbsp;&nbsp;
+			    
+			    </td>
+			    
+			</tr>
+			<?php } ?>
+	</table>
+	
+	<?php
+        
+	 	// add at the end of the file after the table
+	 	try {
+			echo $this->paginationControl(
+			    // the paginator object
+			    $this->paginator,
+			    'sliding',
+			    // the partial to use to render the control
+			    array('partial/paginator.phtml', 'Admin'),
+			    // the route to link to when a user clicks a control link
+			    array("route"=>'default','route_params'=>array('controller'=>'acl','action'=>'role-list'))
+			);
+		}catch (\Exception $e){
+			echo $e->getMessage();
+		}
+	
+	?>
+</div>
+</div>
+
