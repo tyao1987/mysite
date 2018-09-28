@@ -172,14 +172,14 @@ class Module
         $siteConfig = Resource::loadSite($domain);
         $country = $siteConfig["country"];
         // 加载 route 配置
-        $siteRouteConfig = __DIR__ . '/config/router/' . $siteConfig["short_name"] . '.config.php';
+        $siteRouteConfig = __DIR__ . '/config/router/' . $siteConfig["short_name"] . '.php';
         if (file_exists($siteRouteConfig)) {
         	$routerConfig = require $siteRouteConfig;
         } else {
-        	$routerConfig = require __DIR__ . '/config/router/'.strtolower($country).'.config.php';
+        	$routerConfig = require __DIR__ . '/config/router/'.strtolower($country).'.php';
         }
         //加载公共路由
-        $publicRouteConfig = require __DIR__ . '/config/router/public.config.php';
+        $publicRouteConfig = require __DIR__ . '/config/router/public.php';
         $routerConfig = array("routes"=>array_merge($routerConfig['routes'],$publicRouteConfig));
         
         // 加载 module 配置
