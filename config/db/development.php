@@ -1,5 +1,5 @@
 <?php
-$dbProduction = require ROOT_PATH . '/config/db.production.php';
+$dbProduction = require ROOT_PATH . '/config/db/production.php';
 $dbDevelopment = array(
     "cmsdb" => array(
         "host"        => "127.0.0.1", 

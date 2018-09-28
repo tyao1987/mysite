@@ -30,6 +30,6 @@ class DbAdapterCluster{
 	}
 	
 	protected static function getConfig(){
-		return require ROOT_PATH . '/config/db.' . APPLICATION_ENV . '.php';
+		return require ROOT_PATH . '/config/db/' . APPLICATION_ENV . '.php';
 	}
 }
