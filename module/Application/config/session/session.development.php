@@ -1,5 +1,5 @@
 <?php
-$sessionProduction = require_once ROOT_PATH .'/module/Application/config/session.production.php';
+$sessionProduction = require_once ROOT_PATH .'/module/Application/config/session/session.production.php';
 $sessionDevelopment = array(
 	'handler' => 'memcache',
 	'memcache' => array(

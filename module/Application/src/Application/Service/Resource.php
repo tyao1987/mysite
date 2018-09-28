@@ -105,7 +105,7 @@ class Resource {
         
     	$manager = new SessionManager();
     	
-    	$config = require ROOT_PATH.'/module/Application/config/session.'.APPLICATION_ENV.'.php';
+    	$config = require ROOT_PATH.'/module/Application/config/session/session.'.APPLICATION_ENV.'.php';
     	$handler = $config['handler'];
     	$cacheStorage = StorageFactory::factory(array(
     		'adapter' => $config[$handler]['config'],
