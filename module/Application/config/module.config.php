@@ -32,7 +32,7 @@ return array(
         	'Application\Controller\Memcache' 	=> 'Application\Controller\MemcacheController',
         	'Application\Controller\Document' 	=> 'Application\Controller\DocumentController',
         	'Application\Controller\CssJs'      => 'Application\Controller\CssJsController',
-        	'Application\Controller\Category'      => 'Application\Controller\CategoryController',
+        	'Application\Controller\Category'   => 'Application\Controller\CategoryController',
         ),
     ),
     'view_manager' => array(
