@@ -7,7 +7,7 @@ define('ROOT_PATH', dirname(dirname(__FILE__)));
 
 chdir(ROOT_PATH);
 
-$env = file_get_contents(ROOT_PATH . "/config/env.txt");
+$env = file_get_contents(ROOT_PATH . "/config/cron.env.txt");
 if($env === false){
 	echo "APPLICATION_ENV NOT FOUND";
 	exit;

@@ -11,9 +11,9 @@ defined('APPLICATION_ENV')
 || define('APPLICATION_ENV', (getenv('APPLICATION_ENV')?getenv('APPLICATION_ENV'):'production'));
 
 //为定时任务注入环境变量
-$env = file_get_contents(ROOT_PATH . "/config/env.txt");
+$env = file_get_contents(ROOT_PATH . "/config/cron.env.txt");
 if($env === false || $env != APPLICATION_ENV){
-	file_put_contents(ROOT_PATH . "/config/env.txt", APPLICATION_ENV);
+	file_put_contents(ROOT_PATH . "/config/cron.env.txt", APPLICATION_ENV);
 }
 defined('ACTIVE_MODULE')
 || define('ACTIVE_MODULE', (getenv('ACTIVE_MODULE')?getenv('ACTIVE_MODULE'):'application'));
