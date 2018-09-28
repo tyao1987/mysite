@@ -22,7 +22,7 @@ class Cache{
 	protected $storages = array();
 	
 	function __construct(){
-		$this->config = require ROOT_PATH . '/config/cache.' . APPLICATION_ENV . '.php';
+		$this->config = require ROOT_PATH . '/config/cache/' . APPLICATION_ENV . '.php';
 	}
 	
 	/**

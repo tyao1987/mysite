@@ -1,5 +1,5 @@
 <?php
-$cacheProduction = require ROOT_PATH . '/config/cache.production.php';
+$cacheProduction = require ROOT_PATH . '/config/cache/production.php';
 $cacheDevelopment =  array(
     "cache" => array(
         "name" => "memcached", 
