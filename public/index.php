@@ -36,7 +36,7 @@ Test\Util\Timer::start('ALL');
 
 try {
     // Run the application!
-    $application = Zend\Mvc\Application::init(require 'config/' . ACTIVE_MODULE . '.config.php');
+    $application = Zend\Mvc\Application::init(require 'config/module/' . ACTIVE_MODULE . '.config.php');
     $application->run();
 } catch (\Exception $e) {
 	$loader->add('Application', ROOT_PATH . '/module/Application/src/');
