@@ -31,7 +31,7 @@ require 'init_autoloader.php';
 
 try {
     // Run the application!
-    $application = Zend\Mvc\Application::init(require 'config/module/' . ACTIVE_MODULE . '.config.php');
+    $application = Zend\Mvc\Application::init(require 'config/module/' . ACTIVE_MODULE . '.php');
     $application->run();
 } catch (\Exception $e) {
 	echo $e->getMessage();exit;
