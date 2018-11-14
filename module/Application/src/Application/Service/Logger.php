@@ -20,12 +20,12 @@ class Logger {
             if (!self::$enabled) {
                 return null;
             }
-            $file = Util::getWritableDir('log') . $config['log']['file'];
-            $backup = $file . date('YmdHi') . '_bak';
-            if((file_exists($file) && !is_writable($file))
-                || (20480000 < filesize($file))){
-                rename($file, $backup);
-            }
+            $file = Util::getWritableDir('log') .date('Y-m-d')."-". $config['log']['file'];
+//             $backup = $file . date('YmdHi') . '_bak';
+//             if((file_exists($file) && !is_writable($file))
+//                 || (20480000 < filesize($file))){
+//                 rename($file, $backup);
+//             }
             
             $logger = new Log\Logger;
             $writer = new Log\Writer\Stream($file);
